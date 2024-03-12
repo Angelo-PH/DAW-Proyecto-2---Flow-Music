@@ -26,63 +26,100 @@ const songs = [
     { title: "Fardos", author: "JC Reyes", file: "../assets/media/audio/JC REYES FT DE LA GHETTO - FARDOS.mp3", cover: "../assets/media/img/fardos.jpg" },
     { title: "La paso cabrón", author: "Noriel", file: "../assets/media/audio/La Paso Cabrón (Cover Audio).mp3", cover: "../assets/media/img/laPasoCabron.jpg" },
     { title: "Las Bratz (REMIX)", author: "JC Reyes", file: "../assets/media/audio/LAS BRATZ (remix) - Aissa, Saiko, JC Reyes ft El bobe, Juseph, Nickzzy.mp3", cover: "../assets/media/img/lasBratz.jpg" },
-    { title: "DM", author: "Cosculluela", file: "../assets/media/audio/Mueka, Cosculluela - DM (Video Oficial).mp3", cover: "../assets/media/img/DM.jpg" }
+    { title: "DM", author: "Cosculluela", file: "../assets/media/audio/Mueka, Cosculluela - DM (Video Oficial).mp3", cover: "../assets/media/img/DM.jpg" },
+
     // Agrega más pistas de audio aquí si es necesario
 ];
-document.addEventListener("DOMContentLoaded", function () {
-    const musicCardsContainer = document.querySelectorAll('.music-card');
 
-    songs.forEach((song, index) => {
-        const musicCard = musicCardsContainer[index];
-        const img = musicCard.querySelector('img');
-        const songName = musicCard.querySelector('.songName');
-        const songAuthor = musicCard.querySelector('.songAuthor');
+function mostrarCanciones() {
+    let musicCards = document.querySelectorAll('.music-card');
+    musicCards.forEach(function (musicCard, index) {
+        let song = songs[index];
+        // Encuentra los elementos dentro de musicCard usando querySelector
+        let cover = musicCard.querySelector('.cover');
+        let songName = musicCard.querySelector('.songName');
+        let songAuthor = musicCard.querySelector('.songAuthor');
+        let playButton = musicCard.querySelector('.btn-play');
 
-        img.src = song.cover;
-        img.alt = song.title;
+        // Asigna los valores de la canción a los elementos correspondientes
+        cover.src = song.cover;
         songName.textContent = song.title;
         songAuthor.textContent = song.author;
 
-        // Agregar evento de reproducción
-        const playButton = musicCard.querySelector('.btn-play');
         playButton.addEventListener('click', function () {
+            playPause.src = '../assets/icons/pause.svg';
             playSong(index);
         });
     });
-});
+}
 
 document.addEventListener("DOMContentLoaded", function () {
-    const musicCardsContainer = document.querySelectorAll('.music-card');
+    mostrarCanciones();
+    const musicContainer = document.querySelector('.musicsRow');
     const searchBar = document.querySelector('.form-control');
     const clearButton = document.getElementById('limpiarBuscador');
-
     // Agregar evento de búsqueda
     searchBar.addEventListener('input', function () {
-        const searchTerm = searchBar.value.toLowerCase();
+        const searchTerm = searchBar.value.trim().toLowerCase();
         const filteredSongs = songs.filter(song =>
             song.title.toLowerCase().includes(searchTerm) ||
             song.author.toLowerCase().includes(searchTerm)
         );
 
-        // Ocultar todas las tarjetas de música
-        musicCardsContainer.forEach(card => {
-            card.style.display = 'none';
-        });
+        // Limpiar el contenedor de música antes de mostrar los resultados filtrados
+        musicContainer.innerHTML = '';
 
         // Mostrar solo las tarjetas de música que coincidan con la búsqueda
         filteredSongs.forEach(song => {
-            const index = songs.findIndex(s => s === song);
-            musicCardsContainer[index].style.display = 'block';
+            const musicCardHTML = `
+                <div class="col-md-3">
+                    <div class="music-card">
+                        <img class="cover" src="${song.cover}" alt="">
+                        <div class="music-card-description">
+                            <p class="songName">${song.title}</p>
+                            <p class="songAuthor">${song.author}</p>
+                        </div>
+                        <button class="btn btn-primary btn-play">
+                            <img src="../assets/icons/Play.svg" alt="" class="icon-card">
+                        </button>
+                    </div>
+                </div>
+            `;
+            // let playButton = musicCardHTML.;
+            // playButton.addEventListener('click', function () {
+            //     playPause.src = '../assets/icons/pause.svg';
+            //     playSong(index);
+            // });
+
+            // Agregar la tarjeta de música al contenedor
+            musicContainer.insertAdjacentHTML('beforeend', musicCardHTML);
         });
     });
-
     // Agregar evento para limpiar el input de búsqueda
     clearButton.addEventListener('click', function () {
         searchBar.value = '';
-        searchBar.dispatchEvent(new Event('input')); // Disparar evento de input para actualizar la búsqueda
+        musicContainer.innerHTML = '';
+        for (let i = 0 ; i<12 ; i++){
+            const musicCardHTML = `
+                <div class="col-md-3">
+                    <div class="music-card">
+                        <img class="cover" src="" alt="">
+                        <div class="music-card-description">
+                            <p class="songName"></p>
+                            <p class="songAuthor">$</p>
+                        </div>
+                        <button class="btn btn-primary btn-play">
+                            <img src="../assets/icons/Play.svg" alt="" class="icon-card">
+                        </button>
+                    </div>
+                </div>
+            `;
+            musicContainer.insertAdjacentHTML('beforeend', musicCardHTML);
+        }
+        mostrarCanciones();
+
     });
 
-    // Resto del código...
 });
 
 
@@ -158,6 +195,15 @@ nextTrack.addEventListener('click', () => {
 
 previousTrack.addEventListener('click', () => {
     currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    loadSong(currentSongIndex);
+    audioPlayer.play();
+});
+
+// Event listener para pasar a la siguiente canción cuando la actual termine
+audioPlayer.addEventListener('ended', () => {
+    // Incrementar el índice de la canción actual
+    currentSongIndex = (currentSongIndex + 1) % songs.length;
+    // Cargar y reproducir la siguiente canción
     loadSong(currentSongIndex);
     audioPlayer.play();
 });

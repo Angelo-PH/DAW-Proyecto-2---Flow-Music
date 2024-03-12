@@ -17,6 +17,10 @@ header a {
     font-size: 35px;
 }
 
+.col1 {
+    display: inline-block;
+}
+
 .versions {
     display: flex;
     justify-content: space-around;
