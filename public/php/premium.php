@@ -1,3 +1,14 @@
+<?php
+// Inicia la sesión
+session_start();
+
+// Verifica si el usuario está autenticado
+if (!isset($_SESSION['usuario_nombre'])) {
+  // Si el usuario no está autenticado, redirige a la página de inicio de sesión
+  header("Location: login.php");
+  exit(); // Asegura que el script termine después de la redirección
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,6 +25,8 @@
       transform: scale(1.05);
       transition: transform 0.3s ease;
     }
+    
+    
   </style>
 </head>
 
@@ -28,9 +41,9 @@
   </header>
 
   <main>
-    <div class="container my-3">
-      <div class="row row-cols-1 row-cols-md-3 mb-3 justify-content-center">
-        <div class="col1">
+    <div class="container my-5">
+      <div class="row justify-content-center">
+        <div class="col-md-3 mb-3">
           <div class="card mb-4 rounded-3 shadow-sm">
             <div class="card-header py-3">
               <h4 class="my-0 fw-normal">Prime</h4>
@@ -43,11 +56,11 @@
                 <li>Reproducción en linea</li>
                 <li>Acceso a ayuda en linea</li>
               </ul>
-              <a href="../html/premiumLogin.html" class="w-100 btn btn-lg btn-primary">Suscribirse a prime</a>
+              <a class="w-100 btn btn-lg btn-primary premium-btn">Suscribirse a prime</a>
             </div>
           </div>
         </div>
-        <div class="col1">
+        <div class="col-md-3 mb-3">
           <div class="card mb-4 rounded-3 shadow-sm border-primary">
             <div class="card-header py-3">
               <h4 class="my-0 fw-normal">Prime 3 meses</h4>
@@ -61,12 +74,12 @@
                 <li>Reproducción en linea</li>
                 <li>Acceso a ayuda en linea</li>
               </ul>
-              <a href="../html/premiumLogin.html" class="w-100 btn btn-lg btn-primary">Suscribirse a prime
+              <a class="w-100 btn btn-lg btn-primary premium-btn">Suscribirse a prime
                 trimestral</a>
             </div>
           </div>
         </div>
-        <div class="col1">
+        <div class="col-md-3 mb-3">
           <div class="card mb-4 rounded-3 shadow-sm border-primary">
             <div class="card-header py-3">
               <h4 class="my-0 fw-normal">Prime 6 meses</h4>
@@ -80,11 +93,11 @@
                 <li>Reproducción en linea</li>
                 <li>Acceso a ayuda en linea</li>
               </ul>
-              <a href="../html/premiumLogin.html" class="w-100 btn btn-lg btn-primary">Suscribirse a prime semestral</a>
+              <a class="w-100 btn btn-lg btn-primary premium-btn">Suscribirse a prime semestral</a>
             </div>
           </div>
         </div>
-        <div class="col1">
+        <div class="col-md-3 mb-3">
           <div class="card mb-4 rounded-3 shadow-sm border-primary">
             <div class="card-header py-3">
               <h4 class="my-0 fw-normal">Prime 12 meses</h4>
@@ -97,7 +110,7 @@
                 <li>Reproducción en linea</li>
                 <li>Acceso a ayuda en linea</li>
               </ul>
-              <a href="../html/premiumLogin.html" class="w-100 btn btn-lg btn-primary">Suscribirse a prime anual</a>
+              <a class="w-100 btn btn-lg btn-primary premium-btn">Suscribirse a prime anual</a>
             </div>
           </div>
         </div>
@@ -113,6 +126,37 @@
       <a href="https://www.twitter.com"><i class="fab fa-twitter"></i> Twitter</a>
     </div>
   </footer>
+
+  <script>
+    // Selecciona todos los elementos con la clase "premium-btn"
+    let premiumBtns = document.querySelectorAll(".premium-btn");
+    premiumBtns.forEach(function (btn) {
+      btn.addEventListener("click", function (event) {
+        // Realizar una petición al servidor para verificar la sesión del usuario
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "verificar_sesion.php", true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              // Si la sesión está iniciada, redirigir a formTarjeta.php
+              if (xhr.responseText.trim() === "sesion_iniciada") {
+                window.location.href = "formTarjeta.php";
+              } else {
+                // Si la sesión no está iniciada, redirigir a login.html
+                window.location.href = "login.html";
+              }
+            } else {
+              console.error("Error al verificar la sesión");
+            }
+          }
+        };
+        xhr.send();
+        // Evitar que el navegador siga el enlace por defecto
+        event.preventDefault();
+      });
+    });
+  </script>
+
 </body>
 
 </html>

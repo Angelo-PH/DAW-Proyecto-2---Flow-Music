@@ -1,23 +1,57 @@
 <?php
+// Incluir el archivo de configuración de la base de datos
 include 'config.php';
 
-// Verificar si se han enviado datos del formulario
+session_start();
+// Verificar si se enviaron datos por POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtener los datos del formulario
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    // Obtener datos del formulario
+    if (isset($_POST["email"]) && isset($_POST["password"])) {
+        $email = $_POST["email"];
+        $password = $_POST["password"];
 
-    // Consulta SQL para verificar el usuario y la contraseña
-    $sql = "SELECT * FROM usuario WHERE usuario_nombre='$email' AND contraseña='$password'";
-    $result = $conn->query($sql);
 
-    // Verificar si hay algún resultado
-    if ($result->num_rows > 0) {
-        // Usuario y contraseña son correctos
-        echo "Inicio de sesión exitoso";
+        // Consulta para verificar las credenciales
+        $sql = "SELECT usuario_nombre, correo_electronico, contrasena FROM usuario WHERE correo_electronico = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            // Usuario encontrado, verificar la contraseña
+            $row = $result->fetch_assoc();
+            $username = $row["usuario_nombre"];
+            $usermail = $row["correo_electronico"];
+            $hashed_password = $row["contrasena"];
+
+            // Verificar la contraseña hasheada
+            if (password_verify($password, $hashed_password)) {
+                // Autenticación exitosa
+                $_SESSION['usuario_nombre'] = $username;
+                $_SESSION['correo_electronico'] = $usermail;
+                header("Location: indexIniciado.php");
+                exit(); // Asegúrate de que el script termine aquí después de la redirección
+            } else {
+                // Contraseña incorrecta
+                header("Location: ../html/login.html");
+                exit();
+            }
+        } else {
+            // Usuario no encontrado
+            header("Location: ../html/login.html");
+            exit();
+        }
+
+        // Cerrar consulta
+        $stmt->close();
     } else {
-        // Usuario o contraseña son incorrectos
-        echo "Inicio de sesión fallido";
+        // Datos del formulario incompletos
+        echo "Error: Datos del formulario incompletos.";
+        exit();
     }
 }
+
+// Cerrar conexión
+$conn->close();
 ?>

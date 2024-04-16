@@ -23,23 +23,18 @@
         <h1>Suscribirse en Flow Music</h1>
         <p>Únete a Prime y disfruta de beneficios exclusivos.</p>
         <form action="/suscripcion" method="POST">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
-
-            <label for="correo">Correo electrónico:</label><br>
-            <input type="email" id="correo" name="correo" required>
 
             <label for="tarjeta">Número de tarjeta de crédito:</label>
             <input type="text" id="tarjeta" name="tarjeta" required>
+
+            <label for="nombre">Nombre del titular de la tarjeta:</label>
+            <input type="text" id="nombre" name="nombre" required>
 
             <label for="fecha">Fecha de expiración:</label>
             <input type="text" id="fecha" name="fecha" placeholder="MM/YY" required>
 
             <label for="cvv">CVV:</label>
-            <input type="text" id="cvv" name="cvv" maxlength="3" required>
-
-            <div id="errorMessage" style="color: red; display: none;">Usuario no encontrado</div>
-
+            <input type="password" id="cvv" name="cvv" maxlength="3" required>
             <input type="submit" value="Suscribirse">
         </form>
 
@@ -51,8 +46,6 @@
                 <a href="https://www.twitter.com"><i class="fab fa-twitter"></i> Twitter</a>
             </div>
         </footer>
-
-        <script src="../js/premiumLogin.js"></script>
 
 </body>
 

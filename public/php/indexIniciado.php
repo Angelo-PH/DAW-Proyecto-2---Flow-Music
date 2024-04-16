@@ -1,3 +1,20 @@
+<?php
+// Inicia la sesión
+session_start();
+
+// Verifica si el usuario está autenticado
+if (!isset($_SESSION['usuario_nombre'])) {
+     // Si el usuario no está autenticado, redirige a la página de inicio de sesión
+     header("Location: login.php");
+     exit(); // Asegura que el script termine después de la redirección
+ }
+
+// Obtener el nombre de usuario de la sesión
+$usuario_nombre = $_SESSION['usuario_nombre'];
+$usuario_email = $_SESSION['correo_electronico'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,19 +28,24 @@
 </head>
 
 <body>
+
     <header class="container-fluid bg-dark py-4">
         <div class="row">
             <div class="col">
-                <button type="button" class="btn btn-primary"><a href="../html/premium.html"
+                <button type="button" class="btn btn-primary"><a href="premium.php"
                         style="color: white; text-decoration: none;">Hazte Premium</a></button>
             </div>
             <div class="col text-center">
                 <h1>Flow Music</h1>
             </div>
             <div id="user-options" class="col text-end">
-                <a href="registrate.html" id="linkRegistrate">Registrarte</a>
-                <button type="button" class="btn btn-primary"><a href="login.html"
-                        style="color: white; text-decoration: none;">Iniciar Sesión</a> </button>
+                <img src="../assets/icons/user-solid.svg" alt="Icono SVG" width="40px" height="auto">
+                <span id="username">
+                    <?php echo "Bienvenido! " . $usuario_nombre; ?>
+                </span>
+                <form action="logout.php" method="post">
+                    <button type="submit" name="logout">Cerrar sesión</button>
+                </form>
             </div>
         </div>
     </header>
@@ -33,9 +55,8 @@
 
             <aside class="col-md-3 bg-light" style="background: linear-gradient(to bottom right, #f5f1f1, #353434);">
                 <div id="botonesInicio" class="bg-secondary mx-3 my-3">
-                    <a href="../html/index.html"><img src="../assets/icons/flow music.png" alt="FlowMusic" width="100"
+                    <a href="indexIniciado.php"><img src="../assets/icons/flow music.png" alt="FlowMusic" width="100"
                             style="display: block; margin: 0 auto;"></a>
-
                     <a href="#searcher" style="display: block;"><img src="../assets/icons/magnifying-glass-solid.svg"
                             width="20"> Buscar</a>
                 </div>
@@ -48,7 +69,7 @@
                         <ul>
                             <li>el ñaño es gay</li>
                             <li>el ñaño la tiene pequeña</li>
-                            <li>al ñaño le gustan las gordas</li>
+                            <li>al ñaño le gustan las menores</li>
                         </ul>
                         <button class="btn btn-primary" style=" display: block; margin: 0 auto;">Crear nueva
                             Playlist</button>
@@ -262,10 +283,12 @@
         </div>
     </div>
 
+    <script src="https://kit.fontawesome.com/326c3c7577.js" crossorigin="anonymous"></script>
     <script src="../js/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+
 </body>
 
 </html>

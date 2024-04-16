@@ -8,6 +8,7 @@ const previousTrack = document.getElementById('previousTrack');
 const songLength = document.getElementById('SongLength');
 const currentTime = document.getElementById('CurrentSongTime');
 
+
 let currentSongIndex = 0;
 
 // Lista de canciones
@@ -70,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
         musicContainer.innerHTML = '';
 
         // Mostrar solo las tarjetas de música que coincidan con la búsqueda
-        filteredSongs.forEach(song => {
+        filteredSongs.forEach((song, index) => {
             const musicCardHTML = `
                 <div class="col-md-3">
                     <div class="music-card">
@@ -79,27 +80,34 @@ document.addEventListener("DOMContentLoaded", function () {
                             <p class="songName">${song.title}</p>
                             <p class="songAuthor">${song.author}</p>
                         </div>
-                        <button class="btn btn-primary btn-play">
-                            <img src="../assets/icons/Play.svg" alt="" class="icon-card">
-                        </button>
+                        <button class="btn btn-primary btn-play" data-index="${index}" data-src="${song.file}">
+                        <img src="../assets/icons/Play.svg" alt="" class="icon-card">
+                    </button>
                     </div>
                 </div>
             `;
-            // let playButton = musicCardHTML.;
-            // playButton.addEventListener('click', function () {
-            //     playPause.src = '../assets/icons/pause.svg';
-            //     playSong(index);
-            // });
-
             // Agregar la tarjeta de música al contenedor
             musicContainer.insertAdjacentHTML('beforeend', musicCardHTML);
         });
+        // Obtén todos los botones de reproducción
+        const btnPlayList = document.querySelectorAll('.btn-play');
+
+        // Agrega un controlador de eventos click a cada botón de reproducción
+        btnPlayList.forEach(btnPlay => {
+            btnPlay.addEventListener('click', function () {
+                const index = parseInt(this.getAttribute('data-index'));
+                const song = filteredSongs[index];
+                playPause.src = '../assets/icons/pause.svg';
+                playSong(songs.indexOf(song));
+            });
+        });
+
     });
     // Agregar evento para limpiar el input de búsqueda
     clearButton.addEventListener('click', function () {
         searchBar.value = '';
         musicContainer.innerHTML = '';
-        for (let i = 0 ; i<12 ; i++){
+        for (let i = 0; i < 12; i++) {
             const musicCardHTML = `
                 <div class="col-md-3">
                     <div class="music-card">
@@ -117,18 +125,38 @@ document.addEventListener("DOMContentLoaded", function () {
             musicContainer.insertAdjacentHTML('beforeend', musicCardHTML);
         }
         mostrarCanciones();
-
     });
-
 });
+
+function mostrarNombreUsuario() {
+    // Obtener el elemento donde se mostrará el nombre de usuario
+    var contenido = document.getElementById("user-option");
+    contenido.innerHTML
+    // Crear un elemento para mostrar el nombre de usuario
+    var spanNombreUsuario = document.createElement("span");
+    spanNombreUsuario.textContent = "¡Bienvenido, " + response + "!";
+    // Agregar el elemento al DOM
+    contenido.appendChild(spanNombreUsuario);
+}
+
+function cerrarSesion() {
+    // Realizar una solicitud para cerrar la sesión
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "logout.php", true);
+    xhr.send();
+    // Redirigir a la página de inicio de sesión
+    window.location.href = "login.html";
+}
+
 
 
 function playSong(index) {
-    const audioPlayer = document.getElementById('audioPlayer');
     const song = songs[index];
     const songTitle = document.querySelector('.song-title');
     const songAuthor = document.querySelector('.song-author');
+    const songCover = document.getElementById('audioCover');
 
+    songCover.src = song.cover;
     songTitle.textContent = song.title;
     songAuthor.textContent = song.author;
     audioPlayer.src = song.file;

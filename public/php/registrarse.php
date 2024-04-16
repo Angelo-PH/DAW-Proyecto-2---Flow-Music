@@ -1,49 +1,34 @@
 <?php
 include 'config.php';
-// Obté les dades enviades des del formulari
-$name = $_POST['name'];
-$correo_electronico = $_POST['correo_electronico'];
-$password = $_POST['password'];
 
-// Connecta amb la base de dades (canvia les credencials segons la teva configuració)
-$servername = "localhost";
-$dbusername = "root";
-$dbpassword = "";
-$dbname = "flowmusic_bd";
+// Verificar si se recibieron datos del formulario
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Obtener los datos del formulario
+    $nombre = $_POST['nombre'];
+    $correo_electronico = $_POST['correo_electronico'];
+    $password = $_POST['password'];
 
-$conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
+    // Escapar caracteres especiales para evitar inyección de SQL
+    $nombre = mysqli_real_escape_string($conn, $nombre);
+    $correo_electronico = mysqli_real_escape_string($conn, $correo_electronico);
+    $password = mysqli_real_escape_string($conn, $password);
 
-// Verifica la connexió
-if ($conn->connect_error) {
-    die("Connexió fallida: " . $conn->connect_error);
-}
+    // Hash de la contraseña
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-// Escapa les dades per prevenir injeccions SQL
-$name = mysqli_real_escape_string($conn, $name);
-$correo_electronico = mysqli_real_escape_string($conn, $correo_electronico);
-$password = mysqli_real_escape_string($conn, $password);
+    // Preparar la consulta SQL para insertar un nuevo usuario
+    $insert_query = "INSERT INTO usuario (usuario_nombre, correo_electronico, contrasena) VALUES ('$nombre', '$correo_electronico', '$hashed_password')";
 
-// Comprova si l'usuari ja existeix amb el mateix nom d'usuari o correo_electronico
-$check_query = "SELECT * FROM usuario WHERE usuario_nombre='$username' OR correo_electronico='$correo_electronico'";
-$check_result = $conn->query($check_query);
-
-if ($check_result->num_rows > 0) {
-    // L'usuari ja existeix, envia una resposta d'error
-    echo "ERROR_USER_EXISTS";
-} else {
-    // L'usuari no existeix, procedeix amb el registre
-    $insert_query = "INSERT INTO usuario (contraseña, usuario_nombre, correo_electronico, Foto, Premium) VALUES ('$password', '$name', '$correo_electronico', NULL, 0)";
-
+    // Ejecutar la consulta
     if ($conn->query($insert_query) === TRUE) {
-
-        echo "OK";
-        header("Location: index.html");
+        // Redirigir al usuario a la página de registro
+        header("Location: ../html/index.html");
+        exit; // Asegúrate de detener la ejecución del script después de la redirección
     } else {
-        // Hi ha hagut un error en el registre
-        echo "ERROR_REGISTRATION";
+        echo "Error al registrar usuario: " . $conn->error;
     }
 }
 
-// Tanca la connexió amb la base de dades
+// Cerrar la conexión a la base de datos
 $conn->close();
 ?>

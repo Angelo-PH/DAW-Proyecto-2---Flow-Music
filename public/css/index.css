@@ -1,7 +1,5 @@
-/* header*/
-
 header {
-    background-color: #3D3D3D;
+    background-color: black;
 }
 
 header h1 {
@@ -10,10 +8,8 @@ header h1 {
     font-size: 35px;
 }
 
-
-
 #linkRegistrate {
-    color: gray;
+    color: rgb(255, 255, 255);
     text-decoration: none;
     font-size: 16px;
     margin-right: 20px;
@@ -22,6 +18,10 @@ header h1 {
 #linkRegistrate:hover {
     color: white;
     font-size: 17px;
+}
+
+#username{
+    color: white;
 }
 
 /*Aside*/
@@ -41,20 +41,14 @@ header h1 {
     border-radius: 7.5%;
 }
 
-/*Aside footer*/
 #footer {
-    background-color: #333;
-    /* Color de fondo del footer */
+    background-color: rgb(116, 114, 114);
     color: #fff;
-    /* Color del texto del footer */
     padding: 20px;
-    /* Espaciado interno del footer */
     width: 100%;
-    /* Ancho completo del footer */
     text-align: center;
-    /* Alinea el texto en el centro */
+    border-radius: 7px;
 }
-
 
 /* Reproductor de musica */
 .music-player-container {
@@ -69,6 +63,15 @@ header h1 {
     align-items: center;
     flex-direction: column;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.35);
+    position: sticky;
+    bottom: 0px;
+}
+#audioCover{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: 30px;
+    top: 15px;
 }
 
 .title-music-container {
@@ -167,7 +170,7 @@ audio {
 /* Music-cards */
 
 .music-card {
-    border: 1px solid #ccc;
+    border: 1px solid #969494;
     padding: 15px;
     margin-top: 5px;
     margin-bottom: 5px;

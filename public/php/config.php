@@ -1,20 +1,18 @@
 <?php
 // Datos de conexión a la base de datos
-$servername = "localhost"; // Puede que necesites cambiarlo si tu servidor de MySQL no está en localhost
-$username = "admin";
-$password = "123456_aA";
-$database = "flowmusic_bd";
+$servername = "localhost"; // o la dirección IP de tu servidor si no estás trabajando localmente
+$username = "admin"; // Nombre de usuario de la base de datos
+$password = "123456_aA"; // Contraseña de la base de datos
+$dbname = "flowmusic_bd"; // Nombre de la base de datos
 
 // Crear conexión
-$conn = new mysqli($servername, $username, $password, $database);
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-
-// Verificar conexión
+// Verificar la conexión
 if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
-} else {
-    echo "exito";
-}
-
+    die("Error en la conexión a la BD: " . $conn->connect_error);
+    }
+//  else {
+//     echo "La conexion a la BD se realizó con éxito.";
+// }
 ?>
