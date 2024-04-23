@@ -4,10 +4,10 @@ session_start();
 
 // Verifica si el usuario está autenticado
 if (!isset($_SESSION['usuario_nombre'])) {
-     // Si el usuario no está autenticado, redirige a la página de inicio de sesión
-     header("Location: login.php");
-     exit(); // Asegura que el script termine después de la redirección
- }
+    // Si el usuario no está autenticado, redirige a la página de inicio de sesión
+    header("Location: login.php");
+    exit(); // Asegura que el script termine después de la redirección
+}
 
 // Obtener el nombre de usuario de la sesión
 $usuario_nombre = $_SESSION['usuario_nombre'];
@@ -25,6 +25,7 @@ $usuario_email = $_SESSION['correo_electronico'];
     <link rel="stylesheet" href="../css/index.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/sesionIniciada.css">
 </head>
 
 <body>
@@ -39,10 +40,20 @@ $usuario_email = $_SESSION['correo_electronico'];
                 <h1>Flow Music</h1>
             </div>
             <div id="user-options" class="col text-end">
-                <img src="../assets/icons/user-solid.svg" alt="Icono SVG" width="40px" height="auto">
-                <span id="username">
-                    <?php echo "Bienvenido! " . $usuario_nombre; ?>
-                </span>
+                <img src="../assets/icons/user-solid.svg" id="myImg" alt="Icono SVG" width="35px" height="auto">
+
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <p>Información de la imagen</p>
+                        <!-- Aquí puedes agregar más contenido de la imagen -->
+                    </div>
+                </div>
+
+
+
+
+
                 <form action="logout.php" method="post">
                     <button type="submit" name="logout">Cerrar sesión</button>
                 </form>

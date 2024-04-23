@@ -2,12 +2,6 @@
 // Inicia la sesión
 session_start();
 
-// Verifica si el usuario está autenticado
-if (!isset($_SESSION['usuario_nombre'])) {
-  // Si el usuario no está autenticado, redirige a la página de inicio de sesión
-  header("Location: login.php");
-  exit(); // Asegura que el script termine después de la redirección
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,15 +19,13 @@ if (!isset($_SESSION['usuario_nombre'])) {
       transform: scale(1.05);
       transition: transform 0.3s ease;
     }
-    
-    
   </style>
 </head>
 
 <body>
   <header class="container-fluid bg-dark py-4">
     <div class="col text-center">
-      <a href="../html/index.html">Flow Music</a></href><br>
+      <a href="../html/index.html" id="linkFlowMusic">Flow Music</a></href><br>
     </div>
     <main class="text-center text-white">
       <a>Planes de suscripción para FlowMusic</a>
@@ -143,7 +135,7 @@ if (!isset($_SESSION['usuario_nombre'])) {
                 window.location.href = "formTarjeta.php";
               } else {
                 // Si la sesión no está iniciada, redirigir a login.html
-                window.location.href = "login.html";
+                window.location.href = "../html/login.html";
               }
             } else {
               console.error("Error al verificar la sesión");
@@ -155,6 +147,26 @@ if (!isset($_SESSION['usuario_nombre'])) {
         event.preventDefault();
       });
     });
+
+    document.getElementById("linkFlowMusic").addEventListener("click", function(event) {
+    event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
+    
+    // Realizar una solicitud AJAX para verificar la sesión
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "verificar_sesion.php", true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Si la respuesta es "sesion_iniciada", redirigir a indexIniciado.php
+            if (xhr.responseText === "sesion_iniciada") {
+                window.location.href = "indexIniciado.php";
+            } else {
+                // Si la respuesta es "sesion_no_iniciada", redirigir a ../html/index.html
+                window.location.href = "../html/index.html";
+            }
+        }
+    };
+    xhr.send();
+});
   </script>
 
 </body>
