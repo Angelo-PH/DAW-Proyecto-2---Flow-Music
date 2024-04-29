@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-04-2024 a las 10:30:49
+-- Tiempo de generación: 29-04-2024 a las 23:23:08
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.1.17
 
@@ -87,6 +87,46 @@ CREATE TABLE `lista_reproduccion` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `payment_info`
+--
+
+CREATE TABLE `payment_info` (
+  `payment_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `cardholder_name` varchar(255) NOT NULL,
+  `card_number` varchar(16) NOT NULL,
+  `expiry_month` int(11) NOT NULL,
+  `expiry_year` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `subscription`
+--
+
+CREATE TABLE `subscription` (
+  `subscription_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `subscription_type` enum('none','mensual','trimestral','semestral','anual') NOT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `status` enum('activo','inactivo','pendiente') DEFAULT 'pendiente'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `subscription`
+--
+
+INSERT INTO `subscription` (`subscription_id`, `user_id`, `subscription_type`, `start_date`, `end_date`, `status`) VALUES
+(1, 1, 'mensual', '2024-04-29', '2024-05-29', 'activo'),
+(2, 23, 'mensual', '2024-04-29', '2024-05-29', 'activo'),
+(3, 24, 'mensual', '2024-04-29', '2024-05-29', 'inactivo');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuario`
 --
 
@@ -95,14 +135,17 @@ CREATE TABLE `usuario` (
   `usuario_nombre` varchar(255) NOT NULL,
   `contrasena` varchar(255) NOT NULL,
   `fecha_registro` varchar(10) DEFAULT NULL,
-  `suscripcion` varchar(255) DEFAULT NULL,
-  `correo_electronico` varchar(255) DEFAULT NULL,
-  `titular_tarjeta_nom` varchar(255) NOT NULL,
-  `tarjeta_num` varchar(255) NOT NULL,
-  `fecha_caducidad` varchar(255) NOT NULL,
-  `cvv` int(3) NOT NULL
+  `correo_electronico` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`usuario_id`, `usuario_nombre`, `contrasena`, `fecha_registro`, `correo_electronico`) VALUES
+(1, 'EjemploUsuario', 'micontrasena123', '2024-04-29', 'ejemplo@correo.com'),
+(23, 'usuario creado', '123456', '29-04-2024', 'ucreado@gmail.com'),
+(24, 'Adam Iglesias', '123456', '2024-04-29', 'aiglesias@gmail.com');
 
 --
 -- Índices para tablas volcadas
@@ -144,6 +187,20 @@ ALTER TABLE `lista_reproduccion`
   ADD KEY `usuario_id` (`usuario_id`);
 
 --
+-- Indices de la tabla `payment_info`
+--
+ALTER TABLE `payment_info`
+  ADD PRIMARY KEY (`payment_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indices de la tabla `subscription`
+--
+ALTER TABLE `subscription`
+  ADD PRIMARY KEY (`subscription_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
@@ -178,10 +235,22 @@ ALTER TABLE `lista_reproduccion`
   MODIFY `lista_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `payment_info`
+--
+ALTER TABLE `payment_info`
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `subscription`
+--
+ALTER TABLE `subscription`
+  MODIFY `subscription_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Restricciones para tablas volcadas
@@ -210,6 +279,18 @@ ALTER TABLE `genero`
 --
 ALTER TABLE `lista_reproduccion`
   ADD CONSTRAINT `lista_reproduccion_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `payment_info`
+--
+ALTER TABLE `payment_info`
+  ADD CONSTRAINT `payment_info_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuario` (`usuario_id`);
+
+--
+-- Filtros para la tabla `subscription`
+--
+ALTER TABLE `subscription`
+  ADD CONSTRAINT `subscription_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuario` (`usuario_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
