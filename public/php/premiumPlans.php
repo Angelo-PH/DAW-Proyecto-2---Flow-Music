@@ -14,12 +14,8 @@ session_start();
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <link rel="stylesheet" href="../css/premium.css">
   <script src="https://kit.fontawesome.com/4bab62df81.js" crossorigin="anonymous"></script>
-  <style>
-    .col1:hover {
-      transform: scale(1.05);
-      transition: transform 0.3s ease;
-    }
-  </style>
+  <script src="premiumPlans.js"></script>
+
 </head>
 
 <body>
@@ -31,6 +27,8 @@ session_start();
       <a>Planes de suscripción para FlowMusic</a>
     </main>
   </header>
+
+  <h6>Disfruta de todos los planes premium de Flow Music.</h6>
 
   <main>
     <div class="container my-5">
@@ -48,7 +46,7 @@ session_start();
                 <li>Reproducción en linea</li>
                 <li>Acceso a ayuda en linea</li>
               </ul>
-              <a class="w-100 btn btn-lg btn-primary premium-btn">Suscribirse a prime</a>
+              <a id="prime-mensual" class="w-100 btn btn-lg btn-primary premium-btn">Suscribirse a prime</a>
             </div>
           </div>
         </div>
@@ -118,56 +116,6 @@ session_start();
       <a href="https://www.twitter.com"><i class="fab fa-twitter"></i> Twitter</a>
     </div>
   </footer>
-
-  <script>
-    // Selecciona todos los elementos con la clase "premium-btn"
-    let premiumBtns = document.querySelectorAll(".premium-btn");
-    premiumBtns.forEach(function (btn) {
-      btn.addEventListener("click", function (event) {
-        // Realizar una petición al servidor para verificar la sesión del usuario
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "verificar_sesion.php", true);
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-              // Si la sesión está iniciada, redirigir a formTarjeta.php
-              if (xhr.responseText.trim() === "sesion_iniciada") {
-                window.location.href = "formTarjeta.php";
-              } else {
-                // Si la sesión no está iniciada, redirigir a login.html
-                window.location.href = "../html/login.html";
-              }
-            } else {
-              console.error("Error al verificar la sesión");
-            }
-          }
-        };
-        xhr.send();
-        // Evitar que el navegador siga el enlace por defecto
-        event.preventDefault();
-      });
-    });
-
-    document.getElementById("linkFlowMusic").addEventListener("click", function(event) {
-    event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
-    
-    // Realizar una solicitud AJAX para verificar la sesión
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "verificar_sesion.php", true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Si la respuesta es "sesion_iniciada", redirigir a indexIniciado.php
-            if (xhr.responseText === "sesion_iniciada") {
-                window.location.href = "indexIniciado.php";
-            } else {
-                // Si la respuesta es "sesion_no_iniciada", redirigir a ../html/index.html
-                window.location.href = "../html/index.html";
-            }
-        }
-    };
-    xhr.send();
-});
-  </script>
 
 </body>
 

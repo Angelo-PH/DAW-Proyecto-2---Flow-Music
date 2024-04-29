@@ -9,7 +9,8 @@
     width: 100%; 
     height: 100%; 
     overflow: auto; 
-    background-color: rgba(0,0,0,0.8); 
+    background-color: rgba(0,0,0,0.8);
+    
   }
   
   .modal-content {
@@ -17,7 +18,9 @@
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 30%;
+    height: 600px;
+    text-align: center;
   }
   
   .close {
@@ -25,6 +28,7 @@
     float: right;
     font-size: 28px;
     font-weight: bold;
+    margin-left: 500px;
   }
   
   .close:hover,
@@ -33,4 +37,10 @@
     text-decoration: none;
     cursor: pointer;
   }
-  
+
+ #buttonLogout {
+    margin-bottom: 50px;
+    background-color: rgba(48, 125, 241);
+    border-radius: 6px;
+    color: white;
+ }

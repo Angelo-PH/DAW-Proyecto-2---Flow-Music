@@ -12,6 +12,7 @@ if (!isset($_SESSION['usuario_nombre'])) {
 // Obtener el nombre de usuario de la sesión
 $usuario_nombre = $_SESSION['usuario_nombre'];
 $usuario_email = $_SESSION['correo_electronico'];
+$suscripcion = $_SESSION['suscripcion'];
 
 ?>
 
@@ -22,10 +23,12 @@ $usuario_email = $_SESSION['correo_electronico'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flow Music</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/sesionIniciada.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/sesionIniciada.css">
+
 </head>
 
 <body>
@@ -33,30 +36,29 @@ $usuario_email = $_SESSION['correo_electronico'];
     <header class="container-fluid bg-dark py-4">
         <div class="row">
             <div class="col">
-                <button type="button" class="btn btn-primary"><a href="premium.php"
+                <button type="button" class="btn btn-primary"><a href="premiumPlans.php"
                         style="color: white; text-decoration: none;">Hazte Premium</a></button>
             </div>
             <div class="col text-center">
                 <h1>Flow Music</h1>
             </div>
             <div id="user-options" class="col text-end">
-                <img src="../assets/icons/user-solid.svg" id="myImg" alt="Icono SVG" width="35px" height="auto">
+                <img src="../assets/icons/user-solid.svg" id="myImg" alt="Icono SVG" width="35px" height="auto"
+                    style="cursor: pointer;">
 
                 <div id="myModal" class="modal">
-                    <div class="modal-content">
+                    <div class="modal-content" style="width: 600px;">
                         <span class="close">&times;</span>
-                        <p>Información de la imagen</p>
-                        <!-- Aquí puedes agregar más contenido de la imagen -->
+                        <p>Bienvenido, <?php echo $usuario_nombre; ?></p>
+                        <p>Tu correo electrónico es: <?php echo $usuario_email; ?></p>
+                        <p>Su plan actual es: <?php echo $suscripcion; ?></p>
+
+                        <form action="logout.php" method="post">
+                            <button type="submit" id="buttonLogout" name="logout" class="btn btn-primary">Cerrar
+                                sesión</button>
+                        </form>
                     </div>
                 </div>
-
-
-
-
-
-                <form action="logout.php" method="post">
-                    <button type="submit" name="logout">Cerrar sesión</button>
-                </form>
             </div>
         </div>
     </header>
@@ -82,11 +84,70 @@ $usuario_email = $_SESSION['correo_electronico'];
                             <li>el ñaño la tiene pequeña</li>
                             <li>al ñaño le gustan las menores</li>
                         </ul>
-                        <button class="btn btn-primary" style=" display: block; margin: 0 auto;">Crear nueva
-                            Playlist</button>
+
+                        <button class="btn btn-primary" id="openModalBtn" style=" display: block; margin: 0 auto;">Crear
+                            nueva Playlist</button>
+
+
+
+                        <div class="modal fade" id="playlistModal" tabindex="-1" role="dialog"
+                            aria-labelledby="playlistModalLabel" aria-hidden="true" style="margin-bottom: 400px;">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <!-- Encabezado del modal -->
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="playlistModalLabel" style="color: black">Crear nueva
+                                            Playlist</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Cuerpo del modal -->
+                                    <div class="modal-body">
+                                        <!-- Formulario básico -->
+                                        <form id="playlistForm">
+                                            <div class="form-group">
+                                                <label for="playlistName">Nombre de la Playlist:</label>
+                                                <input type="text" class="form-control" id="playlistName"
+                                                    name="playlistName" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Crear</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
 
                     </div>
                 </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+                <!-- JavaScript para controlar la apertura del modal -->
+                <script>
+                    $(document).ready(function () {
+                        // Función para mostrar el modal cuando se hace clic en el botón
+                        $('#openModalBtn').click(function () {
+                            $('#playlistModal').modal('show');
+                        });
+
+                        // Función para enviar el formulario de la playlist
+                        $('#playlistForm').submit(function (event) {
+                            event.preventDefault();
+                            // Aquí puedes agregar la lógica para manejar el envío del formulario
+                            // Por ejemplo, puedes enviar los datos del formulario a través de AJAX
+                            // y luego cerrar el modal después de recibir una respuesta exitosa
+
+                            // En este ejemplo, simplemente mostraremos un mensaje de confirmación
+                            alert('PlayList creada correctamente!');
+                            $('#playlistModal').modal('hide');
+                        });
+                    });
+
+                </script>
 
                 <div id="footer">
                     <p>@2024 Flow Music</p>
@@ -296,6 +357,7 @@ $usuario_email = $_SESSION['correo_electronico'];
 
     <script src="https://kit.fontawesome.com/326c3c7577.js" crossorigin="anonymous"></script>
     <script src="../js/index.js"></script>
+    <script src="../js/sesionIniciada.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>

@@ -19,23 +19,21 @@
     </header>
 
 
-    <form id="loginForm">
+    <form id="loginForm" action="suscribir.php" method="POST">
         <h1>Suscribirse en Flow Music</h1>
         <p>Únete a Prime y disfruta de beneficios exclusivos.</p>
-        <form action="/suscripcion" method="POST">
-            <label for="tarjeta">Número de tarjeta de crédito:</label>
-            <input type="text" id="tarjeta" name="tarjeta" required>
+        <label for="tarjeta">Número de tarjeta de crédito:</label>
+        <input type="text" id="tarjeta" name="tarjeta" required>
 
-            <label for="nombre">Nombre del titular de la tarjeta:</label>
-            <input type="text" id="nombre" name="nombre" required>
+        <label for="nombre">Nombre del titular de la tarjeta:</label>
+        <input type="text" id="nombre" name="nombre" required>
 
-            <label for="fecha">Fecha de expiración:</label>
-            <input type="text" id="fecha" name="fecha" placeholder="MM/YY" required>
+        <label for="fecha">Fecha de expiración:</label>
+        <input type="text" id="fecha" name="fecha" placeholder="MM/YY" required>
 
-            <label for="cvv">CVV:</label>
-            <input type="password" id="cvv" name="cvv" maxlength="3" required>
-            <input type="submit" value="Suscribirse">
-        </form>
+        <label for="cvv">CVV:</label>
+        <input type="password" id="cvv" name="cvv" maxlength="3" required>
+        <input type="submit" value="Suscribirse">
     </form>
 
     <footer>
@@ -57,10 +55,10 @@
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     // Si la respuesta es "sesion_iniciada", redirigir a indexIniciado.php
                     if (xhr.responseText === "sesion_iniciada") {
-                        window.location.href = "indexIniciado.php";
+                        window.location.href = "../php/indexSession.php";
                     } else {
                         // Si la respuesta es "sesion_no_iniciada", redirigir a ../html/index.html
-                        window.location.href = "../html/index.html";
+                        window.location.href = "index.html";
                     }
                 }
             };
@@ -70,32 +68,3 @@
 </body>
 
 </html>
-
-<?php
-// Incluir el archivo de configuración
-include 'config.php';
-// Inicia la sesión
-session_start();
-// Verificar si se recibieron datos del formulario
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recoger los datos del formulario
-    $tarjeta = $_POST["tarjeta"];
-    $nombre = $_POST["nombre"];
-    $fecha = $_POST["fecha"];
-    $cvv = $_POST["cvv"];
-
-    $usuario_nombre = $_SESSION['usuario_nombre'];
-
-    // Preparar la consulta SQL para actualizar el registro de usuario
-    $sql = "UPDATE usuario SET tarjeta_num = '$tarjeta', fecha_caducidad = '$fecha', titular_tarjeta_nom = '$nombre', cvv = '$cvv' WHERE nombre_usuario = '$usuario_nombre'";
-
-    // Ejecutar la consulta
-    if ($conn->query($sql) === TRUE) {
-        // Redirigir a la página IndexIniciado.php
-        header("Location: IndexIniciado.php");
-        exit(); // Asegura que el script se detenga después de la redirección
-    } else {
-        echo "Error al insertar registro: " . $conn->error;
-    }
-}
-?>

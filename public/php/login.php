@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         // Consulta para verificar las credenciales
-        $sql = "SELECT usuario_nombre, correo_electronico, contrasena FROM usuario WHERE correo_electronico = ?";
+        $sql = "SELECT usuario_nombre, correo_electronico, suscripcion, contrasena FROM usuario WHERE correo_electronico = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $row = $result->fetch_assoc();
             $username = $row["usuario_nombre"];
             $usermail = $row["correo_electronico"];
+            $suscripcion = $row['suscripcion'];
             $hashed_password = $row["contrasena"];
 
             // Verificar la contraseña hasheada
@@ -30,7 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Autenticación exitosa
                 $_SESSION['usuario_nombre'] = $username;
                 $_SESSION['correo_electronico'] = $usermail;
-                header("Location: indexIniciado.php");
+                $_SESSION['suscripcion'] = $suscripcion;
+                header("Location: indexSession.php");
                 exit(); // Asegúrate de que el script termine aquí después de la redirección
             } else {
                 // Contraseña incorrecta

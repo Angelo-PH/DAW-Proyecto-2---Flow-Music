@@ -105,3 +105,7 @@ footer {
     text-decoration: none;
     margin: 0 10px;
 }
+.col1:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }

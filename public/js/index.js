@@ -57,7 +57,7 @@ function mostrarCanciones() {
 document.addEventListener("DOMContentLoaded", function () {
     mostrarCanciones();
     const musicContainer = document.querySelector('.musicsRow');
-    const searchBar = document.querySelector('.form-control');
+    const searchBar = document.getElementById('searcher');
     const clearButton = document.getElementById('limpiarBuscador');
     // Agregar evento de búsqueda
     searchBar.addEventListener('input', function () {
