@@ -10,10 +10,6 @@ class Usuario
     public $contrasena;
     public $fecha_registro;
     public $correo_electronico;
-    //public $subscription_type;
-    //public $start_date;
-    //public $end_date;
-    //public $status;
 
     // Constructor with DB
     public function __construct($db)
@@ -24,13 +20,9 @@ class Usuario
     // Get Usuarios
     public function read()
     {
-        // // Create query
-        // $query = 'SELECT u.usuario_id, u.usuario_nombre, u.fecha_registro, u.correo_electronico, s.subscription_type, s.start_date, s.end_date, s.status
-        //             FROM ' . $this->table . ' u, subscriptions s
-        //             WHERE  u.usuario_id = s.user_id';
 
         $query = 'SELECT usuario_id, usuario_nombre, correo_electronico, fecha_registro
-                     FROM ' . $this->table ;
+                     FROM ' . $this->table;
 
         // Prepare statement
         $stmt = $this->conn->prepare($query);
@@ -44,13 +36,8 @@ class Usuario
     // Get Single Usuario
     public function read_single()
     {
-        // // Create query
-        // $query = 'SELECT u.usuario_id, u.usuario_nombre, u.fecha_registro, u.correo_electronico, s.subscription_type, s.start_date, s.end_date, s.status
-        // FROM ' . $this->table . ' u, subscriptions s
-        // WHERE u.usuario_id = s.user_id AND u.usuario_id = ?
-        // LIMIT 0,1';
 
-            $query = 'SELECT usuario_id, usuario_nombre, correo_electronico, fecha_registro
+        $query = 'SELECT usuario_id, usuario_nombre, correo_electronico, fecha_registro
             FROM ' . $this->table . '
             WHERE usuario_id = ?
             LIMIT 0,1';
@@ -70,10 +57,6 @@ class Usuario
         $this->usuario_nombre = $row['usuario_nombre'];
         $this->fecha_registro = $row['fecha_registro'];
         $this->correo_electronico = $row['correo_electronico'];
-        // $this->subscription_type = $row['subscription_type'];
-        // $this->start_date = $row['start_date'];
-        // $this->end_date = $row['end_date'];
-        // $this->status = $row['status'];
     }
 
     // Create Usuario
