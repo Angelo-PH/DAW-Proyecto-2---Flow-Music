@@ -1,20 +1,18 @@
 <?php
-// Inicia la sesión
 session_start();
 
-// Verifica si el usuario está autenticado
-if (!isset($_SESSION['usuario_nombre'])) {
-    // Si el usuario no está autenticado, redirige a la página de inicio de sesión
-    header("Location: login.php");
-    exit(); // Asegura que el script termine después de la redirección
+// Verificar si la variable de sesión 'usuario_nombre' está establecida para determinar si el usuario está autenticado
+if (isset($_SESSION['usuario_nombre'])) {
+    $username = $_SESSION['usuario_nombre'];
+    $usermail = $_SESSION['correo_electronico'];
+    $user_id = $_SESSION['usuario_id'];
+} else {
+    // Si no hay sesión activa, redirigir a la página de inicio de sesión
+    header("Location: ../html/login.html");
+    exit();
 }
-
-// Obtener el nombre de usuario de la sesión
-$usuario_nombre = $_SESSION['usuario_nombre'];
-$usuario_email = $_SESSION['correo_electronico'];
-$suscripcion = $_SESSION['suscripcion'];
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -49,9 +47,8 @@ $suscripcion = $_SESSION['suscripcion'];
                 <div id="myModal" class="modal">
                     <div class="modal-content" style="width: 600px;">
                         <span class="close">&times;</span>
-                        <p>Bienvenido, <?php echo $usuario_nombre; ?></p>
-                        <p>Tu correo electrónico es: <?php echo $usuario_email; ?></p>
-                        <p>Su plan actual es: <?php echo $suscripcion; ?></p>
+                        <p>Bienvenido, <?php echo $username; ?></p>
+                        <p>Tu correo electrónico es: <?php echo $usermail; ?></p>
 
                         <form action="logout.php" method="post">
                             <button type="submit" id="buttonLogout" name="logout" class="btn btn-primary">Cerrar
@@ -76,78 +73,62 @@ $suscripcion = $_SESSION['suscripcion'];
 
                 <div>
                     <div id="playlists" class="bg-secondary mx-3 my-3" style="color: white;">
-                        <h2>Tu biblioteca</h2>
-                        <h4>Crea tu propia lista de Reproducción</h4>
-                        <h4>Mis playlist:</h4>
-                        <ul>
-                            <li>el ñaño es gay</li>
-                            <li>el ñaño la tiene pequeña</li>
-                            <li>al ñaño le gustan las menores</li>
+                        <h4>Tu biblioteca</h4>
+                        <h5>Crea tu propia lista de reproducción</h5>
+                        <h5>Mis playlist:</h5>
+                        <ul id="playlistList">
+                            <!-- Aquí se agregarán las playlists dinámicamente -->
                         </ul>
-
-                        <button class="btn btn-primary" id="openModalBtn" style=" display: block; margin: 0 auto;">Crear
+                        <button class="btn btn-primary" id="openModalBtn" style="display: block; margin: 0 auto;">Crear
                             nueva Playlist</button>
-
-
-
-                        <div class="modal fade" id="playlistModal" tabindex="-1" role="dialog"
-                            aria-labelledby="playlistModalLabel" aria-hidden="true" style="margin-bottom: 400px;">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <!-- Encabezado del modal -->
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="playlistModalLabel" style="color: black">Crear nueva
-                                            Playlist</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-
-                                    <!-- Cuerpo del modal -->
-                                    <div class="modal-body">
-                                        <!-- Formulario básico -->
-                                        <form id="playlistForm">
-                                            <div class="form-group">
-                                                <label for="playlistName">Nombre de la Playlist:</label>
-                                                <input type="text" class="form-control" id="playlistName"
-                                                    name="playlistName" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Crear</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-
                     </div>
                 </div>
 
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <!-- Modal para crear una nueva playlist -->
+                <div class="modal fade" id="playlistModal" tabindex="-1" role="dialog"
+                    aria-labelledby="playlistModalLabel" aria-hidden="true" style="margin-bottom: 400px;">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <!-- Encabezado del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="playlistModalLabel" style="color: black">Crear nueva
+                                    Playlist</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
 
-                <!-- JavaScript para controlar la apertura del modal -->
-                <script>
-                    $(document).ready(function () {
-                        // Función para mostrar el modal cuando se hace clic en el botón
-                        $('#openModalBtn').click(function () {
-                            $('#playlistModal').modal('show');
-                        });
+                            <!-- Cuerpo del modal -->
+                            <div class="modal-body">
+                                <!-- Formulario básico -->
+                                <form id="playlistForm" action="solicitud_playlist.php" method="POST">
+                                    <div class="form-group">
+                                        <label for="playlistName" style="color: black;">Nombre de la Playlist:</label>
+                                        <input type="text" class="form-control" id="playlistName" name="playlistName"
+                                            required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Crear</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                        // Función para enviar el formulario de la playlist
-                        $('#playlistForm').submit(function (event) {
-                            event.preventDefault();
-                            // Aquí puedes agregar la lógica para manejar el envío del formulario
-                            // Por ejemplo, puedes enviar los datos del formulario a través de AJAX
-                            // y luego cerrar el modal después de recibir una respuesta exitosa
-
-                            // En este ejemplo, simplemente mostraremos un mensaje de confirmación
-                            alert('PlayList creada correctamente!');
-                            $('#playlistModal').modal('hide');
-                        });
-                    });
-
-                </script>
+                <div id="privacy-cookies-links" class="mx-3 my-3">
+                    <h5>Información Legal</h5>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="../informacion_legal/politica_privacidad.html"
+                                style="text-decoration: none; color: inherit;">Política de Privacidad</a></li>
+                        <li><a href="../informacion_legal/configuracion_cookies.html"
+                                style="text-decoration: none; color: inherit;">Configuración de Cookies</a></li>
+                        <li><a href="../informacion_legal/seguridad_privacidad.html"
+                                style="text-decoration: none; color: inherit;">Seguridad y centro de privacidad</a></li>
+                        <li><a href="../informacion_legal/anuncios.html"
+                                style="text-decoration: none; color: inherit;">Informacion de anuncios</a></li>
+                        <li><a href="../informacion_legal/accesibilidad.html"
+                                style="text-decoration: none; color: inherit;">Accesibilidad</a></li>
+                    </ul>
+                </div>
 
                 <div id="footer">
                     <p>@2024 Flow Music</p>
@@ -357,10 +338,59 @@ $suscripcion = $_SESSION['suscripcion'];
 
     <script src="https://kit.fontawesome.com/326c3c7577.js" crossorigin="anonymous"></script>
     <script src="../js/index.js"></script>
-    <script src="../js/sesionIniciada.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+
+        // Obtener elementos
+        var modal = document.getElementById("myModal");
+        var img = document.getElementById("myImg");
+        var closeModal = document.getElementsByClassName("close")[0];
+
+        // Cuando la imagen es clicada, mostrar el modal
+        img.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // Cuando el usuario clickea en la 'X', cerrar el modal
+        closeModal.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // Cuando el usuario clickea fuera del modal, cerrarlo
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        $(document).ready(function () {
+            // Función para mostrar el modal cuando se hace clic en el botón
+            $('#openModalBtn').click(function () {
+                $('#playlistModal').modal('show');
+            });
+
+            // Función para enviar el formulario de la playlist
+            $('#playlistForm').submit(function (event) {
+                event.preventDefault();
+                // Obtener el nombre de la playlist del formulario
+                var playlistName = $('#playlistName').val();
+                // Crear un nuevo elemento de lista con el nombre de la playlist
+                var newPlaylistItem = $('<li>').text(playlistName);
+                // Agregar el nuevo elemento a la lista de playlists
+                $('#playlistList').append(newPlaylistItem);
+                // Cerrar el modal
+               // $('#playlistModal').modal('hide');
+                // Limpiar el campo de nombre de la playlist
+                $('#playlistName').val('');
+            });
+        });
+
+    </script>
 
 </body>
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-04-2024 a las 23:23:08
+-- Tiempo de generación: 30-04-2024 a las 14:01:12
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.1.17
 
@@ -80,8 +80,7 @@ CREATE TABLE `lista_reproduccion` (
   `lista_id` int(11) NOT NULL,
   `lista_nombre` varchar(255) NOT NULL,
   `usuario_id` int(11) NOT NULL,
-  `fecha_creacion` date NOT NULL,
-  `visibilidad` varchar(255) NOT NULL
+  `fecha_creacion` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -100,6 +99,13 @@ CREATE TABLE `payment_info` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `payment_info`
+--
+
+INSERT INTO `payment_info` (`payment_id`, `user_id`, `cardholder_name`, `card_number`, `expiry_month`, `expiry_year`, `created_at`) VALUES
+(2, 1, 'Angelo Ponte', '555555555555', 12, 0, '2024-04-30 11:28:24');
+
 -- --------------------------------------------------------
 
 --
@@ -110,8 +116,8 @@ CREATE TABLE `subscription` (
   `subscription_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `subscription_type` enum('none','mensual','trimestral','semestral','anual') NOT NULL,
-  `start_date` date DEFAULT NULL,
-  `end_date` date DEFAULT NULL,
+  `start_date` varchar(255) DEFAULT NULL,
+  `end_date` varchar(255) DEFAULT NULL,
   `status` enum('activo','inactivo','pendiente') DEFAULT 'pendiente'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -145,7 +151,8 @@ CREATE TABLE `usuario` (
 INSERT INTO `usuario` (`usuario_id`, `usuario_nombre`, `contrasena`, `fecha_registro`, `correo_electronico`) VALUES
 (1, 'EjemploUsuario', 'micontrasena123', '2024-04-29', 'ejemplo@correo.com'),
 (23, 'usuario creado', '123456', '29-04-2024', 'ucreado@gmail.com'),
-(24, 'Adam Iglesias', '123456', '2024-04-29', 'aiglesias@gmail.com');
+(24, 'Adam Iglesias', '123456', '2024-04-29', 'aiglesias@gmail.com'),
+(25, 'User Created', '123456', '2024-04-30', 'ucreated@gmail.com');
 
 --
 -- Índices para tablas volcadas
@@ -238,7 +245,7 @@ ALTER TABLE `lista_reproduccion`
 -- AUTO_INCREMENT de la tabla `payment_info`
 --
 ALTER TABLE `payment_info`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `subscription`
@@ -250,7 +257,7 @@ ALTER TABLE `subscription`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Restricciones para tablas volcadas

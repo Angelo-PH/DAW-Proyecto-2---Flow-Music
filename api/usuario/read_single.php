@@ -25,10 +25,6 @@ $usuario_arr = array(
     'usuario_nombre' => $usuario->usuario_nombre,
     'correo_electronico' => $usuario->correo_electronico,
     'fecha_registro' => $usuario->fecha_registro,
-    // 'subscription_type' => $usuario->subscription_type,
-    // 'start_date' => $usuario->start_date,
-    // 'end_date' => $usuario->end_date,
-    // 'status' => $usuario->status
 );
 
 // Make JSON

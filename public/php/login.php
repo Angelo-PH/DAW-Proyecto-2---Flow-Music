@@ -1,8 +1,9 @@
 <?php
 // Incluir el archivo de configuración de la base de datos
-include 'config.php';
+include '../../config/Database.php';
 
 session_start();
+
 // Verificar si se enviaron datos por POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener datos del formulario
@@ -10,28 +11,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST["email"];
         $password = $_POST["password"];
 
+        // Instanciar la clase Database para conectarse a la base de datos
+        $database = new Database();
+        $conn = $database->connect();
 
         // Consulta para verificar las credenciales
-        $sql = "SELECT usuario_nombre, correo_electronico, suscripcion, contrasena FROM usuario WHERE correo_electronico = ?";
+        $sql = "SELECT usuario_nombre, correo_electronico, contrasena FROM usuario WHERE correo_electronico = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $stmt->execute([$email]);
+        $row = $stmt->fetch();
 
-        if ($result->num_rows > 0) {
-            // Usuario encontrado, verificar la contraseña
-            $row = $result->fetch_assoc();
+        if ($row) {
+            // Usuario encontrado, verificar la contraseña en texto plano
+            $user_id = $row["usuario_id"];
             $username = $row["usuario_nombre"];
             $usermail = $row["correo_electronico"];
-            $suscripcion = $row['suscripcion'];
-            $hashed_password = $row["contrasena"];
+            $plain_password = $row["contrasena"];
 
-            // Verificar la contraseña hasheada
-            if (password_verify($password, $hashed_password)) {
+            // Verificar la contraseña en texto plano
+            if ($password === $plain_password) {
                 // Autenticación exitosa
+                $_SESSION['usuario_id'] = $user_id;
                 $_SESSION['usuario_nombre'] = $username;
                 $_SESSION['correo_electronico'] = $usermail;
-                $_SESSION['suscripcion'] = $suscripcion;
                 header("Location: indexSession.php");
                 exit(); // Asegúrate de que el script termine aquí después de la redirección
             } else {
@@ -44,16 +46,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: ../html/login.html");
             exit();
         }
-
-        // Cerrar consulta
-        $stmt->close();
     } else {
         // Datos del formulario incompletos
         echo "Error: Datos del formulario incompletos.";
         exit();
     }
+} else {
+    // Si no se envió por POST, redirigir a la página de inicio de sesión
+    header("Location: ../html/login.html");
+    exit();
 }
-
-// Cerrar conexión
-$conn->close();
 ?>

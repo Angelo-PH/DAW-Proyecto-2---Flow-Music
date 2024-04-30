@@ -1,7 +1,15 @@
 <?php
-// Inicia la sesión
 session_start();
 
+// Verificar si la variable de sesión 'usuario_nombre' está establecida para determinar si el usuario está autenticado
+if (isset($_SESSION['usuario_nombre'])) {
+  $username = $_SESSION['usuario_nombre'];
+  $usermail = $_SESSION['correo_electronico'];
+} else {
+  // Si no hay sesión activa, redirigir a la página de inicio de sesión
+  header("Location: ../html/login.html");
+  exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +54,7 @@ session_start();
                 <li>Reproducción en linea</li>
                 <li>Acceso a ayuda en linea</li>
               </ul>
-              <a id="prime-mensual" class="w-100 btn btn-lg btn-primary premium-btn">Suscribirse a prime</a>
+              <a class="w-100 btn btn-lg btn-primary premium-btn" href="formTarjeta.php">Suscribirse a prime</a>
             </div>
           </div>
         </div>
@@ -64,7 +72,7 @@ session_start();
                 <li>Reproducción en linea</li>
                 <li>Acceso a ayuda en linea</li>
               </ul>
-              <a class="w-100 btn btn-lg btn-primary premium-btn">Suscribirse a prime
+              <a class="w-100 btn btn-lg btn-primary premium-btn" href="formTarjeta.php">Suscribirse a prime
                 trimestral</a>
             </div>
           </div>
@@ -83,7 +91,8 @@ session_start();
                 <li>Reproducción en linea</li>
                 <li>Acceso a ayuda en linea</li>
               </ul>
-              <a class="w-100 btn btn-lg btn-primary premium-btn">Suscribirse a prime semestral</a>
+              <a class="w-100 btn btn-lg btn-primary premium-btn" href="formTarjeta.php">Suscribirse a prime
+                semestral</a>
             </div>
           </div>
         </div>
@@ -100,7 +109,7 @@ session_start();
                 <li>Reproducción en linea</li>
                 <li>Acceso a ayuda en linea</li>
               </ul>
-              <a class="w-100 btn btn-lg btn-primary premium-btn">Suscribirse a prime anual</a>
+              <a class="w-100 btn btn-lg btn-primary premium-btn" href="formTarjeta.php">Suscribirse a prime anual</a>
             </div>
           </div>
         </div>

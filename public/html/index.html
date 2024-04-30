@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col">
                 <button type="button" class="btn btn-primary">
-                    <a href="../php/premiumPlans.php" style="color: white; text-decoration: none;">Hazte Premium</a>
+                    <a href="premiumPlans.html" style="color: white; text-decoration: none;">Hazte Premium</a>
                 </button>
             </div>
             <div class="col text-center">
@@ -36,24 +36,56 @@
                 <div id="botonesInicio" class="bg-secondary mx-3 my-3">
                     <a href="../html/index.html"><img src="../assets/icons/flow music.png" alt="FlowMusic" width="100"
                             style="display: block; margin: 0 auto;"></a>
-                            <a style="text-align: center; font-weight: bold;" >Inicia sesión para disfrutar del maximo rendimiento de Flow Music.</a>
+                    <a style="text-align: center; font-weight: bold;">Inicia sesión para disfrutar del maximo
+                        rendimiento de Flow Music.</a>
                 </div>
 
                 <div>
                     <div id="playlists" class="bg-secondary mx-3 my-3" style="color: white;">
-                        <h2>Tu biblioteca</h2>
-                        <h4>Crea tu propia lista de Reproducción</h4>
-                        <h4>Mis playlist:</h4>
+                        <h3>Tu biblioteca</h3>
+                        <h5>Crea tu propia lista de reproducción</h5>
+                        <h5>Mis playlist:</h5>
                         <ul>
-                            <li>el ñaño es gay</li>
-                            <li>el ñaño la tiene pequeña</li>
-                            <li>al ñaño le gustan las gordas</li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
                         </ul>
-                        <button class="btn btn-primary" style=" display: block; margin: 0 auto;">Crear nueva
+                        <button class="btn btn-primary" id="openModalBtn" style=" display: block; margin: 0 auto;">Crear
+                            nueva
                             Playlist</button>
-
                     </div>
                 </div>
+
+                <!-- Modal para iniciar sesión -->
+                <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="loginModalLabel">Inicia sesión</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Debes iniciar sesión para crear una playlist.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="privacy-cookies-links" class="mx-3 my-3">
+                    <h5>Información Legal</h5>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="../informacion_legal/politica_privacidad.html" style="text-decoration: none; color: inherit;">Política de Privacidad</a></li>
+                        <li><a href="../informacion_legal/configuracion_cookies.html" style="text-decoration: none; color: inherit;">Configuración de Cookies</a></li>
+                        <li><a href="../informacion_legal/seguridad_privacidad.html" style="text-decoration: none; color: inherit;">Seguridad y centro de privacidad</a></li>
+                        <li><a href="../informacion_legal/anuncios.html" style="text-decoration: none; color: inherit;">Informacion de anuncios</a></li>
+                        <li><a href="../informacion_legal/accesibilidad.html" style="text-decoration: none; color: inherit;">Accesibilidad</a></li>
+                    </ul>
+                </div>
+
+                
 
                 <div id="footer">
                     <p>@2024 Flow Music</p>
@@ -262,9 +294,27 @@
     </div>
 
     <script src="../js/index.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Función para mostrar el modal de inicio de sesión cuando se hace clic en el botón "Crear nueva Playlist"
+            $('#openModalBtn').click(function () {
+                // Verificar si el usuario está autenticado (puedes usar una variable global o cualquier otro método de tu aplicación)
+                var userAuthenticated = false; // Por ahora, lo establecemos en falso para simular que el usuario no está autenticado
+
+                if (userAuthenticated) {
+                    // Si el usuario está autenticado, se muestra el modal para crear una nueva playlist
+                    $('#playlistModal').modal('show');
+                } else {
+                    // Si el usuario no está autenticado, se muestra el modal de inicio de sesión
+                    $('#loginModal').modal('show');
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

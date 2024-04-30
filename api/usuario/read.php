@@ -32,10 +32,6 @@ if ($num > 0) {
             'usuario_nombre' => $usuario_nombre,
             'correo_electronico' => $correo_electronico,
             'fecha_registro' => $fecha_registro,
-            // 'subscription_type' => $subscription_type,
-            // 'start_date' => $start_date,
-            // 'end_date' => $end_date,
-            // 'status' => $status
         );
 
         // Push to "data"

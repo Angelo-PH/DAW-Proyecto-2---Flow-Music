@@ -26,21 +26,21 @@ premiumBtns.forEach(function (btn) {
   });
 });
 
-document.getElementById("linkFlowMusic").addEventListener("click", function (event) {
-  event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
-  // Realizar una solicitud AJAX para verificar la sesión
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "../php/verificar_sesion.php", true);
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      // Si la respuesta es "sesion_iniciada", redirigir a indexIniciado.php
-      if (xhr.responseText === "sesion_iniciada") {
-        window.location.href = "indexIniciado.php";
-      } else {
-        // Si la respuesta es "sesion_no_iniciada", redirigir a ../html/index.html
-        window.location.href = "../html/index.html";
-      }
-    }
-  };
-  xhr.send();
-});
+// document.getElementById("linkFlowMusic").addEventListener("click", function (event) {
+//   event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
+//   // Realizar una solicitud AJAX para verificar la sesión
+//   var xhr = new XMLHttpRequest();
+//   xhr.open("GET", "../php/verificar_sesion.php", true);
+//   xhr.onreadystatechange = function () {
+//     if (xhr.readyState === 4 && xhr.status === 200) {
+//       // Si la respuesta es "sesion_iniciada", redirigir a indexIniciado.php
+//       if (xhr.responseText === "sesion_iniciada") {
+//         window.location.href = "indexIniciado.php";
+//       } else {
+//         // Si la respuesta es "sesion_no_iniciada", redirigir a ../html/index.html
+//         window.location.href = "../html/index.html";
+//       }
+//     }
+//   };
+//   xhr.send();
+// });

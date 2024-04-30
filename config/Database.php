@@ -1,23 +1,24 @@
-<?php 
-  class Database {
-    // DB Params
-    private $host = 'localhost';
-    private $db_name = 'flowmusic_bd';
-    private $username = 'admin';
-    private $password = '123456_aA';
-    private $conn;
+<?php
+class Database
+{
+  // DB Params
+  private $host = 'localhost';
+  private $db_name = 'flowmusic_bd';
+  private $username = 'admin';
+  private $password = '123456_aA';
+  private $conn;
 
-    // DB Connect
-    public function connect() {
-      $this->conn = null;
+  // DB Connect
+  public function connect()
+  {
+    $this->conn = null;
 
-      try { 
-        $this->conn = new PDO('mysql:host=' . $this->host . ';dbname=' . $this->db_name, $this->username, $this->password);
-        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      } catch(PDOException $e) {
-        echo 'Connection Error: ' . $e->getMessage();
-      }
-
-      return $this->conn;
+    try {
+      $this->conn = new PDO('mysql:host=' . $this->host . ';dbname=' . $this->db_name, $this->username, $this->password);
+      $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+      echo 'Connection Error: ' . $e->getMessage();
     }
+    return $this->conn;
   }
+}
