@@ -14,14 +14,14 @@ session_start();
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <link rel="stylesheet" href="../css/premium.css">
   <script src="https://kit.fontawesome.com/4bab62df81.js" crossorigin="anonymous"></script>
-  <script src="premiumPlans.js"></script>
+  <script src="../js/premiumPlans.js"></script>
 
 </head>
 
 <body>
   <header class="container-fluid bg-dark py-4">
     <div class="col text-center">
-      <a href="../html/index.html" id="linkFlowMusic">Flow Music</a></href><br>
+      <a id="linkFlowMusic">Flow Music</a><br>
     </div>
     <main class="text-center text-white">
       <a>Planes de suscripción para FlowMusic</a>

@@ -4,7 +4,7 @@ premiumBtns.forEach(function (btn) {
   btn.addEventListener("click", function (event) {
     // Realizar una petición al servidor para verificar la sesión del usuario
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "verificar_sesion.php", true);
+    xhr.open("GET", "../php/verificar_sesion.php", true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
@@ -28,10 +28,9 @@ premiumBtns.forEach(function (btn) {
 
 document.getElementById("linkFlowMusic").addEventListener("click", function (event) {
   event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
-
   // Realizar una solicitud AJAX para verificar la sesión
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "verificar_sesion.php", true);
+  xhr.open("GET", "../php/verificar_sesion.php", true);
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       // Si la respuesta es "sesion_iniciada", redirigir a indexIniciado.php
