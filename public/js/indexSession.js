@@ -46,11 +46,8 @@ function mostrarCanciones() {
         songAuthor.textContent = song.author;
 
         playButton.addEventListener('click', function () {
-            // Redirigir a una página HTML
-            window.location.href = '../html/login.html';
-
-            // playPause.src = '../assets/icons/pause.svg';
-            // playSong(index);
+            playPause.src = '../assets/icons/pause.svg';
+            playSong(index);
         });
     });
 }
@@ -58,77 +55,75 @@ function mostrarCanciones() {
 document.addEventListener("DOMContentLoaded", function () {
     mostrarCanciones();
     const musicContainer = document.querySelector('.musicsRow');
-    const searchBar = document.getElementById('searcher');
-    const clearButton = document.getElementById('limpiarBuscador');
+    // const searchBar = document.getElementById('searcher');
+    // const clearButton = document.getElementById('limpiarBuscador');
     // Agregar evento de búsqueda
-    searchBar.addEventListener('input', function () {
-        const searchTerm = searchBar.value.trim().toLowerCase();
-        const filteredSongs = songs.filter(song =>
-            song.title.toLowerCase().includes(searchTerm) ||
-            song.author.toLowerCase().includes(searchTerm)
-        );
+    // searchBar.addEventListener('input', function () {
+    //     const searchTerm = searchBar.value.trim().toLowerCase();
+    //     const filteredSongs = songs.filter(song =>
+    //         song.title.toLowerCase().includes(searchTerm) ||
+    //         song.author.toLowerCase().includes(searchTerm)
+    //     );
 
-        // Limpiar el contenedor de música antes de mostrar los resultados filtrados
-        musicContainer.innerHTML = '';
+    //     // Limpiar el contenedor de música antes de mostrar los resultados filtrados
+    //     musicContainer.innerHTML = '';
 
-        // Mostrar solo las tarjetas de música que coincidan con la búsqueda
-        filteredSongs.forEach((song, index) => {
-            const musicCardHTML = `
-                <div class="col-md-3">
-                    <div class="music-card">
-                        <img class="cover" src="${song.cover}" alt="">
-                        <div class="music-card-description">
-                            <p class="songName">${song.title}</p>
-                            <p class="songAuthor">${song.author}</p>
-                        </div>
-                        <button class="btn btn-primary btn-play" data-index="${index}" data-src="${song.file}">
-                        <img src="../assets/icons/Play.svg" alt="" class="icon-card">
-                    </button>
-                    </div>
-                </div>
-            `;
-            // Agregar la tarjeta de música al contenedor
-            musicContainer.insertAdjacentHTML('beforeend', musicCardHTML);
-        });
-        // Obtén todos los botones de reproducción
-        const btnPlayList = document.querySelectorAll('.btn-play');
+    //     // Mostrar solo las tarjetas de música que coincidan con la búsqueda
+    //     filteredSongs.forEach((song, index) => {
+    //         const musicCardHTML = `
+    //             <div class="col-md-3">
+    //                 <div class="music-card">
+    //                     <img class="cover" src="${song.cover}" alt="">
+    //                     <div class="music-card-description">
+    //                         <p class="songName">${song.title}</p>
+    //                         <p class="songAuthor">${song.author}</p>
+    //                     </div>
+    //                     <button class="btn btn-primary btn-play" data-index="${index}" data-src="${song.file}">
+    //                     <img src="../assets/icons/Play.svg" alt="" class="icon-card">
+    //                 </button>
+    //                 </div>
+    //             </div>
+    //         `;
+    //         // Agregar la tarjeta de música al contenedor
+    //         musicContainer.insertAdjacentHTML('beforeend', musicCardHTML);
+    //     });
+    //     // Obtén todos los botones de reproducción
+    //     const btnPlayList = document.querySelectorAll('.btn-play');
 
-        // Agrega un controlador de eventos click a cada botón de reproducción
-        btnPlayList.forEach(btnPlay => {
-            btnPlay.addEventListener('click', function () {
-                window.location.href = 'https://ejemplo.com/nueva_pagina.html';
+    //     // Agrega un controlador de eventos click a cada botón de reproducción
+    //     btnPlayList.forEach(btnPlay => {
+    //         btnPlay.addEventListener('click', function () {
+    //             const index = parseInt(this.getAttribute('data-index'));
+    //             const song = filteredSongs[index];
+    //             playPause.src = '../assets/icons/pause.svg';
+    //             playSong(songs.indexOf(song));
+    //         });
+    //     });
 
-                // const index = parseInt(this.getAttribute('data-index'));
-                // const song = filteredSongs[index];
-                // playPause.src = '../assets/icons/pause.svg';
-                // playSong(songs.indexOf(song));
-            });
-        });
-
-    });
-    // Agregar evento para limpiar el input de búsqueda
-    clearButton.addEventListener('click', function () {
-        searchBar.value = '';
-        musicContainer.innerHTML = '';
-        for (let i = 0; i < 12; i++) {
-            const musicCardHTML = `
-                <div class="col-md-3">
-                    <div class="music-card">
-                        <img class="cover" src="" alt="">
-                        <div class="music-card-description">
-                            <p class="songName"></p>
-                            <p class="songAuthor">$</p>
-                        </div>
-                        <button class="btn btn-primary btn-play">
-                            <img src="../assets/icons/Play.svg" alt="" class="icon-card">
-                        </button>
-                    </div>
-                </div>
-            `;
-            musicContainer.insertAdjacentHTML('beforeend', musicCardHTML);
-        }
-        mostrarCanciones();
-    });
+    // });
+    // // Agregar evento para limpiar el input de búsqueda
+    // clearButton.addEventListener('click', function () {
+    //     searchBar.value = '';
+    //     musicContainer.innerHTML = '';
+    //     for (let i = 0; i < 12; i++) {
+    //         const musicCardHTML = `
+    //             <div class="col-md-3">
+    //                 <div class="music-card">
+    //                     <img class="cover" src="" alt="">
+    //                     <div class="music-card-description">
+    //                         <p class="songName"></p>
+    //                         <p class="songAuthor">$</p>
+    //                     </div>
+    //                     <button class="btn btn-primary btn-play">
+    //                         <img src="../assets/icons/Play.svg" alt="" class="icon-card">
+    //                     </button>
+    //                 </div>
+    //             </div>
+    //         `;
+    //         musicContainer.insertAdjacentHTML('beforeend', musicCardHTML);
+    //     }
+    //     mostrarCanciones();
+    // });
 });
 
 function mostrarNombreUsuario() {

@@ -1,18 +1,7 @@
 <?php
 // Incluir la clase Database y cualquier otra configuración necesaria
-include '../../config/Database.php';
+include_once '../../config/Database.php';
 session_start();
-
-// Verificar si la variable de sesión 'usuario_nombre' está establecida para determinar si el usuario está autenticado
-if (isset($_SESSION['usuario_nombre'])) {
-    $username = $_SESSION['usuario_nombre'];
-    $usermail = $_SESSION['correo_electronico'];
-    $user_id = $_SESSION['usuario_id'];
-} else {
-    // Si no hay sesión activa, redirigir a la página de inicio de sesión
-    header("Location: ../html/login.html");
-    exit();
-}
 
 // Verificar si se recibió una solicitud POST desde el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -25,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Preparar la consulta SQL para la inserción de la playlist
-        $query = "INSERT INTO lista_reproduccion (lista_nombre, usuario_id, fecha_creacion) VALUES (:playlistName, $user_id, CURDATE())";
+        $query = "INSERT INTO lista_reproduccion (lista_nombre, usuario_id, fecha_creacion) VALUES (:playlistName, $user_id , DATE())";
         $statement = $conn->prepare($query);
 
         // Bind de los parámetros

@@ -140,8 +140,9 @@ if (isset($_SESSION['usuario_nombre'])) {
 
             <main class="col-md-9">
                 <div class="input-group my-3">
-                    <input type="text" id="searcher" class="form-control" placeholder="¿Qué quieres escuchar?">
-                    <button class="btn btn-outline-secondary" type="button" id="limpiarBuscador">X</button>
+                    <!-- <input type="text" id="searcher" class="form-control" placeholder="¿Qué quieres escuchar?"> -->
+                    <input type="text" id="search-bar" class="form-control" placeholder="Busca una canción">
+                    <button id="search-btn" onclick="search()" class="btn btn-outline-secondary">Buscar</button>
                 </div>
 
                 <div class="row musicsRow">
@@ -337,7 +338,7 @@ if (isset($_SESSION['usuario_nombre'])) {
     </div>
 
     <script src="https://kit.fontawesome.com/326c3c7577.js" crossorigin="anonymous"></script>
-    <script src="../js/index.js"></script>
+    <script src="../js/indexSession.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
@@ -384,13 +385,46 @@ if (isset($_SESSION['usuario_nombre'])) {
                 // Agregar el nuevo elemento a la lista de playlists
                 $('#playlistList').append(newPlaylistItem);
                 // Cerrar el modal
-               // $('#playlistModal').modal('hide');
+                // $('#playlistModal').modal('hide');
                 // Limpiar el campo de nombre de la playlist
                 $('#playlistName').val('');
             });
         });
 
+        function search() {
+            var nombre = document.getElementById('search-bar').value;
+            if (nombre != "") {
+                // Hacer la solicitud AJAX a PHP
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // Cuando se recibe la respuesta, mostrar en pantalla
+                            document.getElementsByClassName('musicsRow').innerHTML = xhr.responseText;
+
+                        } else {
+                            alert('Hubo un problema con la solicitud.');
+                        }
+                    }
+                };
+                xhr.open('GET', 'buscar.php?nombre=' + nombre, true);
+                xhr.send();
+            } else {
+                location.href = "indexSession.php";
+            }
+
+        }
+
     </script>
+
+    <script src="https://kit.fontawesome.com/326c3c7577.js" crossorigin="anonymous"></script>
+    <script src="../js/indexSession.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 
 </body>
 
