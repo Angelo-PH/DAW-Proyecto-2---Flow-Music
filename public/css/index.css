@@ -36,8 +36,8 @@ header h1 {
     text-decoration: none;
 }
 
-#playlists {
-    padding: 10px;
+#playlists-div {
+    padding: 15px;
     border-radius: 7.5%;
 }
 

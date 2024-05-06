@@ -38,7 +38,7 @@
     cursor: pointer;
   }
 
- #buttonLogout {
+ #logout-btn {
     margin-bottom: 50px;
     background-color: rgba(48, 125, 241);
     border-radius: 6px;

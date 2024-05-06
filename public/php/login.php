@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn = $database->connect();
 
         // Consulta para verificar las credenciales
-        $sql = "SELECT usuario_nombre, correo_electronico, contrasena FROM usuario WHERE correo_electronico = ?";
+        $sql = "SELECT usuario_id, usuario_nombre, correo_electronico, fecha_registro, contrasena FROM usuario WHERE correo_electronico = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$email]);
         $row = $stmt->fetch();
@@ -34,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['usuario_id'] = $user_id;
                 $_SESSION['usuario_nombre'] = $username;
                 $_SESSION['correo_electronico'] = $usermail;
+                $_SESSION['fecha_registro'] = $row["fecha_registro"];
                 header("Location: indexSession.php");
                 exit(); // Asegúrate de que el script termine aquí después de la redirección
             } else {

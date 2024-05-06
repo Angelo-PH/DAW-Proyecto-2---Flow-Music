@@ -1,34 +1,35 @@
 <?php
 include '../../config/Database.php';
-// Obtener el nombre enviado desde la solicitud AJAX
-$titol = $_GET['nombre'];
 
-// Consulta a la base de datos
-$sql = "SELECT * FROM cancion WHERE cancion_nombre LIKE '%$titol%'";
-$result = $conn->query($sql);
+if (isset($_GET['searchTerm'])) {
+    $searchTerm = $_GET['searchTerm'];
 
-if ($result->num_rows > 0) {
-    // Mostrar resultados
+    // Consulta SQL para buscar canciones por nombre (cancion_nombre) que contienen el término de búsqueda
+    $sql = "SELECT * FROM cancion WHERE cancion_nombre LIKE ?";
+
+    // Preparar la consulta
+    $stmt = $conn->prepare($sql);
+
+    // Bind parameters y ejecutar la consulta
+    $likeParam = "%$searchTerm%";
+    $stmt->bind_param("s", $likeParam);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $songs = array();
     while ($row = $result->fetch_assoc()) {
-        //echo "ID: " . $row["id_cancion"]. " - Nombre: " . $row["titol"]. " - Edad: " . $row["archivo"]. "<br>";
-
-        echo '
-        <div class="col-md-3">
-            <div class="music-card">
-                <img class="cover" src="' . $row['cover'] . '" alt="Cover de' . $row['cancion_nombre'] . '">
-                <div class="music-card-description">
-                    <p class="songName"> ' . $row['cancion_nombre'] . '</p>
-                    <p class="songAuthor">' . $row['artista_autor'] . '</p>
-                </div>
-                <button class="btn btn-primary btn-play" data-src="' . $row['file'] . ' onclick="playSong(' . $row['file'] . ')>
-                    <img src="../assets/icons/Play.svg" alt="" class="icon-card">
-                </button>
-            </div>
-        </div>
-        ';
+        $songs[] = array(
+            'cancion_nombre' => $row['cancion_nombre'],
+            'artista_autor' => $row['artista_autor'],
+            'cover' => $row['cover']
+            // Agrega más campos aquí si es necesario
+        );
     }
-} else {
-    echo "No se encontraron resultados.";
+
+    // Devolver resultados como JSON
+    echo json_encode($songs);
+
+    // Cerrar la conexión y liberar recursos
+    $stmt->close();
+    $conn->close();
 }
-$conn->close();
-?>

@@ -1,3 +1,40 @@
+const playlistsButton = document.getElementById('playlist-modal-btn')
+const mainContent = document.getElementById('main-content');
+const pageTitle = document.querySelector('h1');
+
+
+function showPlaylistCreationInterface() {
+    const playlistInterfaceHTML = `
+        <!-- Aquí inserta el HTML de la interfaz de creación de lista de reproducción -->
+    `;
+    mainContent.innerHTML = playlistInterfaceHTML;
+}
+
+function replaceMainContent(newContent) {
+    mainContent.innerHTML = newContent;
+}
+
+function restoreOriginalContent() {
+    // Aquí puedes restaurar el contenido original del <main>
+    const originalContent = `
+        <!-- Inserta aquí el contenido original del <main> -->
+    `;
+    mainContent.innerHTML = originalContent;
+}
+
+
+playlistsButton.addEventListener('click', () => {
+    const newContent = `<!-- Aquí puedes insertar el nuevo contenido que deseas mostrar -->`;
+    replaceMainContent(newContent);
+    
+});
+
+pageTitle.addEventListener('click', () => {
+    restoreOriginalContent();
+});
+
+
+
 // Definición de constantes y variables
 const audioPlayer = document.getElementById('audioPlayer');
 const playPause = document.getElementById('PlayPause');
