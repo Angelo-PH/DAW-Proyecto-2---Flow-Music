@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 
 // Include Database and ListaReproduccion model files
 include_once '../../config/Database.php';
-include_once '../../models/ListaReproduccion.php';
+include_once '../../models/Lista_reproduccion.php';
 
 // Instantiate Database
 $database = new Database();
