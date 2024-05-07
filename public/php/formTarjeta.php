@@ -7,7 +7,7 @@
     <title>Suscribirse en FlowMusic</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/premiumLogin.css">
+    <link rel="stylesheet" href="../css/formTarjeta.css">
     <script src="https://kit.fontawesome.com/4bab62df81.js" crossorigin="anonymous"></script>
 </head>
 
@@ -19,7 +19,7 @@
     </header>
 
 
-    <form id="loginForm" action="suscribir.php" method="POST">
+    <form id="loginForm" action="paymentMethod.php" method="POST">
         <h1>Suscribirse en Flow Music</h1>
         <p>Únete a Prime y disfruta de beneficios exclusivos.</p>
         <label for="tarjeta">Número de tarjeta de crédito:</label>
@@ -44,27 +44,7 @@
             <a href="https://www.twitter.com"><i class="fab fa-twitter"></i> Twitter</a>
         </div>
     </footer>
-    <script>
-        document.getElementById("linkFlowMusic").addEventListener("click", function (event) {
-            event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
 
-            // Realizar una solicitud AJAX para verificar la sesión
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "verificar_sesion.php", true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    // Si la respuesta es "sesion_iniciada", redirigir a indexIniciado.php
-                    if (xhr.responseText === "sesion_iniciada") {
-                        window.location.href = "../php/indexSession.php";
-                    } else {
-                        // Si la respuesta es "sesion_no_iniciada", redirigir a ../html/index.html
-                        window.location.href = "index.html";
-                    }
-                }
-            };
-            xhr.send();
-        });
-    </script>
 </body>
 
 </html>

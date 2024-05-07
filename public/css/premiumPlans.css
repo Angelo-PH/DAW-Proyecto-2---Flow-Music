@@ -7,7 +7,6 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(to bottom right, #f5f1f1, #353434);
 }
 
 header a {
@@ -105,7 +104,8 @@ footer {
     text-decoration: none;
     margin: 0 10px;
 }
+
 .col1:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease;
-  }
+}
