@@ -7,57 +7,121 @@ const nextTrack = document.getElementById('nextTrack');
 const previousTrack = document.getElementById('previousTrack');
 const songLength = document.getElementById('SongLength');
 const currentTime = document.getElementById('CurrentSongTime');
-
 const playButtons = document.querySelectorAll('.btn-play');
 
-        playButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const songpath = button.dataset.songpath;
-                console.log(songpath);
-                const songName = button.closest('.music-card').querySelector('.songName').innerText;
-                const songAuthor = button.closest('.music-card').querySelector('.songAuthor').innerText;
-                const songCover = button.closest('.music-card').querySelector('.cover').getAttribute('src');
-                console.log(songName);
-                console.log(songAuthor);
-                console.log(songCover);
+const progressSlider = document.querySelector('.progress-slider');
+let isDragging = false;
 
-                // Update music player information
-                document.getElementById('audioCover').setAttribute('src', songCover);
-                document.querySelector('.song-title').innerText = songName;
-                document.querySelector('.song-author').innerText = songAuthor;
+// Función para actualizar el tiempo de reproducción basado en la posición del control deslizante
+const updateProgress = (x) => {
+    const progressContainer = document.querySelector('.progress-bar');
+    const progressWidth = progressContainer.clientWidth;
+    const clickPosition = x - progressContainer.getBoundingClientRect().left;
+    let percentage = (clickPosition / progressWidth) * 100;
+    percentage = Math.max(0, Math.min(100, percentage)); // Limita el porcentaje entre 0 y 100
 
-                // Load song into audio player
-                audioPlayer.setAttribute('src', `${songpath}`); 
+    const newTime = (percentage / 100) * audioPlayer.duration;
+    audioPlayer.currentTime = newTime;
 
-                // Play the loaded song
-                audioPlayer.play();
-            });
-        });
+    // Actualiza la posición del control deslizante
+    progressSlider.style.left = `${percentage}%`;
+};
+
+// Eventos de mouse para el control deslizante
+progressSlider.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    updateProgress(e.clientX);
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+        updateProgress(e.clientX);
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    if (isDragging) {
+        isDragging = false;
+    }
+});
+
+// Actualiza la posición del control deslizante cuando cambia el tamaño de la ventana
+window.addEventListener('resize', () => {
+    const progressPercentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    progressSlider.style.left = `${progressPercentage}%`;
+});
+
+playButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const songpath = button.dataset.songpath;
+        const songName = button.closest('.music-card').querySelector('.songName').innerText;
+        const songAuthor = button.closest('.music-card').querySelector('.songAuthor').innerText;
+        const songCover = button.closest('.music-card').querySelector('.cover').getAttribute('src');
+        // Update music player information
+        document.getElementById('audioCover').setAttribute('src', songCover);
+        document.querySelector('.song-title').innerText = songName;
+        document.querySelector('.song-author').innerText = songAuthor;
+        // Load song into audio player
+        audioPlayer.setAttribute('src', `${songpath}`);
+        // Play the loaded song
+        audioPlayer.play();
+        playPause.src = '../assets/icons/pause.svg';
+    });
+});
 
 function cerrarSesion() {
     // Realizar una solicitud para cerrar la sesión
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "../php/logout.php", true);
     xhr.send();
-    // Redirigir a la página de inicio de sesión
-    window.location.href = "login.html";
 }
 
-
-
-function playSong(index) {
-    // Pendiente
-    const song = songs[index];
-    const songTitle = document.querySelector('.song-title');
-    const songAuthor = document.querySelector('.song-author');
-    const songCover = document.getElementById('audioCover');
-
-    songCover.src = song.cover;
-    songTitle.textContent = song.title;
-    songAuthor.textContent = song.author;
-    audioPlayer.src = song.file;
-    audioPlayer.play();
+// Función para cerrar el modal
+function closeModal() {
+    console.log("Botón de cierre clicado");
+    var modal = document.getElementById('user-modal');
+    modal.style.display = 'none';
 }
+
+// Obtener elementos
+var modal = document.getElementById("user-modal");
+var img = document.getElementById("user-icon");
+var closeButtons = document.getElementsByClassName("close");
+
+// Cuando la imagen es clicada, mostrar el modal
+img.onclick = function () {
+    modal.style.display = "block";
+}
+
+// Cuando el usuario clickea fuera del modal, cerrarlo
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+$(document).ready(function () {
+    $('#search-btn').click(function () {
+        var searchTerm = $('#search-bar').val();
+
+        // Realizar la solicitud AJAX al servidor
+        $.ajax({
+            url: 'buscar_cancion.php', // Archivo PHP para procesar la búsqueda
+            method: 'POST',
+            data: { searchTerm: searchTerm },
+            success: function (response) {
+                $('#canciones-default').html('');
+                $('#canciones-results').html(response); // Mostrar los resultados en el contenedor
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+});
+
+
+
 
 // Funciones de utilidad
 const calculateTime = (secs) => {
@@ -69,14 +133,6 @@ const calculateTime = (secs) => {
 
 const displayDuration = () => {
     songLength.innerHTML = calculateTime(audioPlayer.duration);
-}
-
-const loadSong = (index) => {
-    // Pendiente
-    const song = songs[index];
-    audioPlayer.src = song.file;
-    document.querySelector('.song-title').textContent = song.title;
-    document.querySelector('.song-author').textContent = song.author;
 }
 
 const setProgress = () => {
@@ -110,27 +166,6 @@ plus10.addEventListener('click', () => {
 
 back10.addEventListener('click', () => {
     audioPlayer.currentTime -= 10;
-});
-
-nextTrack.addEventListener('click', () => {
-    currentSongIndex = (currentSongIndex + 1) % songs.length;
-    loadSong(currentSongIndex);
-    audioPlayer.play();
-});
-
-previousTrack.addEventListener('click', () => {
-    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-    loadSong(currentSongIndex);
-    audioPlayer.play();
-});
-
-// Event listener para pasar a la siguiente canción cuando la actual termine
-audioPlayer.addEventListener('ended', () => {
-    // Incrementar el índice de la canción actual
-    currentSongIndex = (currentSongIndex + 1) % songs.length;
-    // Cargar y reproducir la siguiente canción
-    loadSong(currentSongIndex);
-    audioPlayer.play();
 });
 
 
