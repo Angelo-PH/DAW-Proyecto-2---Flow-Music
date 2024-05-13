@@ -8,120 +8,36 @@ const previousTrack = document.getElementById('previousTrack');
 const songLength = document.getElementById('SongLength');
 const currentTime = document.getElementById('CurrentSongTime');
 
+const playButtons = document.querySelectorAll('.btn-play');
 
-let currentSongIndex = 0;
+        playButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const songpath = button.dataset.songpath;
+                console.log(songpath);
+                const songName = button.closest('.music-card').querySelector('.songName').innerText;
+                const songAuthor = button.closest('.music-card').querySelector('.songAuthor').innerText;
+                const songCover = button.closest('.music-card').querySelector('.cover').getAttribute('src');
+                console.log(songName);
+                console.log(songAuthor);
+                console.log(songCover);
 
-function mostrarCanciones() {
-    let musicCards = document.querySelectorAll('.music-card');
-    musicCards.forEach(function (musicCard, index) {
-        let song = songs[index];
-        // Encuentra los elementos dentro de musicCard usando querySelector
-        let cover = musicCard.querySelector('.cover');
-        let songName = musicCard.querySelector('.songName');
-        let songAuthor = musicCard.querySelector('.songAuthor');
-        let playButton = musicCard.querySelector('.btn-play');
+                // Update music player information
+                document.getElementById('audioCover').setAttribute('src', songCover);
+                document.querySelector('.song-title').innerText = songName;
+                document.querySelector('.song-author').innerText = songAuthor;
 
-        // Asigna los valores de la canción a los elementos correspondientes
-        cover.src = song.cover;
-        songName.textContent = song.title;
-        songAuthor.textContent = song.author;
+                // Load song into audio player
+                audioPlayer.setAttribute('src', `${songpath}`); 
 
-        playButton.addEventListener('click', function () {
-            playPause.src = '../assets/icons/pause.svg';
-            playSong(index);
+                // Play the loaded song
+                audioPlayer.play();
+            });
         });
-    });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    mostrarCanciones();
-    const musicContainer = document.querySelector('.musicsRow');
-    // const searchBar = document.getElementById('searcher');
-    // const clearButton = document.getElementById('limpiarBuscador');
-    // Agregar evento de búsqueda
-    // searchBar.addEventListener('input', function () {
-    //     const searchTerm = searchBar.value.trim().toLowerCase();
-    //     const filteredSongs = songs.filter(song =>
-    //         song.title.toLowerCase().includes(searchTerm) ||
-    //         song.author.toLowerCase().includes(searchTerm)
-    //     );
-
-    //     // Limpiar el contenedor de música antes de mostrar los resultados filtrados
-    //     musicContainer.innerHTML = '';
-
-    //     // Mostrar solo las tarjetas de música que coincidan con la búsqueda
-    //     filteredSongs.forEach((song, index) => {
-    //         const musicCardHTML = `
-    //             <div class="col-md-3">
-    //                 <div class="music-card">
-    //                     <img class="cover" src="${song.cover}" alt="">
-    //                     <div class="music-card-description">
-    //                         <p class="songName">${song.title}</p>
-    //                         <p class="songAuthor">${song.author}</p>
-    //                     </div>
-    //                     <button class="btn btn-primary btn-play" data-index="${index}" data-src="${song.file}">
-    //                     <img src="../assets/icons/Play.svg" alt="" class="icon-card">
-    //                 </button>
-    //                 </div>
-    //             </div>
-    //         `;
-    //         // Agregar la tarjeta de música al contenedor
-    //         musicContainer.insertAdjacentHTML('beforeend', musicCardHTML);
-    //     });
-    //     // Obtén todos los botones de reproducción
-    //     const btnPlayList = document.querySelectorAll('.btn-play');
-
-    //     // Agrega un controlador de eventos click a cada botón de reproducción
-    //     btnPlayList.forEach(btnPlay => {
-    //         btnPlay.addEventListener('click', function () {
-    //             const index = parseInt(this.getAttribute('data-index'));
-    //             const song = filteredSongs[index];
-    //             playPause.src = '../assets/icons/pause.svg';
-    //             playSong(songs.indexOf(song));
-    //         });
-    //     });
-
-    // });
-    // // Agregar evento para limpiar el input de búsqueda
-    // clearButton.addEventListener('click', function () {
-    //     searchBar.value = '';
-    //     musicContainer.innerHTML = '';
-    //     for (let i = 0; i < 12; i++) {
-    //         const musicCardHTML = `
-    //             <div class="col-md-3">
-    //                 <div class="music-card">
-    //                     <img class="cover" src="" alt="">
-    //                     <div class="music-card-description">
-    //                         <p class="songName"></p>
-    //                         <p class="songAuthor">$</p>
-    //                     </div>
-    //                     <button class="btn btn-primary btn-play">
-    //                         <img src="../assets/icons/Play.svg" alt="" class="icon-card">
-    //                     </button>
-    //                 </div>
-    //             </div>
-    //         `;
-    //         musicContainer.insertAdjacentHTML('beforeend', musicCardHTML);
-    //     }
-    //     mostrarCanciones();
-    // });
-});
-
-function mostrarNombreUsuario() {
-    // Obtener el elemento donde se mostrará el nombre de usuario
-    var contenido = document.getElementById("user-option");
-    contenido.innerHTML
-    // Crear un elemento para mostrar el nombre de usuario
-    var spanNombreUsuario = document.createElement("span");
-    spanNombreUsuario.textContent = "¡Bienvenido, " + response + "!";
-    // Agregar el elemento al DOM
-    contenido.appendChild(spanNombreUsuario);
-}
 
 function cerrarSesion() {
     // Realizar una solicitud para cerrar la sesión
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "logout.php", true);
+    xhr.open("GET", "../php/logout.php", true);
     xhr.send();
     // Redirigir a la página de inicio de sesión
     window.location.href = "login.html";
@@ -130,6 +46,7 @@ function cerrarSesion() {
 
 
 function playSong(index) {
+    // Pendiente
     const song = songs[index];
     const songTitle = document.querySelector('.song-title');
     const songAuthor = document.querySelector('.song-author');
@@ -155,6 +72,7 @@ const displayDuration = () => {
 }
 
 const loadSong = (index) => {
+    // Pendiente
     const song = songs[index];
     audioPlayer.src = song.file;
     document.querySelector('.song-title').textContent = song.title;
@@ -215,6 +133,4 @@ audioPlayer.addEventListener('ended', () => {
     audioPlayer.play();
 });
 
-// Cargar la primera canción al cargar la página
-loadSong(currentSongIndex);
 

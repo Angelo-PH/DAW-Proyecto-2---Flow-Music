@@ -8,7 +8,7 @@ $conn = $database->connect();
 $searchTerm = isset($_POST['searchTerm']) ? $_POST['searchTerm'] : '';
 
 // Consulta SQL para buscar canciones por nombre o autor que coincidan con el término de búsqueda
-$sql = "SELECT cancion_nombre, artista_autor, cover FROM cancion 
+$sql = "SELECT * FROM cancion 
         WHERE cancion_nombre LIKE :searchTerm OR artista_autor LIKE :searchTerm
         LIMIT 12";
 $stmt = $conn->prepare($sql);
@@ -25,7 +25,7 @@ if ($stmt->rowCount() > 0) {
         echo '<p class="songName">' . $row['cancion_nombre'] . '</p>';
         echo '<p class="songAuthor">' . $row['artista_autor'] . '</p>';
         echo '</div>';
-        echo '<button class="btn btn-primary btn-play">';
+        echo '<button class="btn btn-primary btn-play" data-songpath="'. $row['file'] .'" >';
         echo '<img src="../assets/icons/Play.svg" alt="" class="icon-card">';
         echo '</button>';
         echo '</div>';

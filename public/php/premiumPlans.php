@@ -30,7 +30,9 @@ if (isset($_SESSION['usuario_nombre'])) {
   <header class="container-fluid bg-dark py-3">
     <div class="row">
       <div class="col text-center">
-        <h1>Flow Music</h1>
+        <a href="indexSession.php" style="text-decoration: none; color: inherit;">
+          <h1 style="text-align: center;">Flow Music</h1>
+        </a>
       </div>
     </div>
   </header>

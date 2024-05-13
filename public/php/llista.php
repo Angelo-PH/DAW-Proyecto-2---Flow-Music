@@ -52,7 +52,9 @@ if (isset($_POST['logout'])) {
                         style="color: white; text-decoration: none;">Hazte Premium</a></button>
             </div>
             <div class="col text-center">
-                <h1>Flow Music</h1>
+                <a href="indexSession.php" style="text-decoration: none; color: inherit;">
+                    <h1 style="text-align: center;">Flow Music</h1>
+                </a>
             </div>
             <div class="col text-end">
                 <img src="../assets/icons/user-solid.svg" id="user-icon" alt="user-icon" width="35px" height="auto"
@@ -79,26 +81,108 @@ if (isset($_POST['logout'])) {
 
             <aside class="col-md-3" style="background: linear-gradient(to bottom, #000000, #f5f1f1); ">
 
-                <img src="../assets/icons/flow music.png" alt="FlowMusic-img" width="100"
-                    style="display: block; margin: 0 auto; margin-top:20px;">
+                <a href="indexSession.php">
+                    <img src="../assets/icons/flow music.png" alt="FlowMusic-img" width="100"
+                        style="display: block; margin: 0 auto; margin-top:20px;">
+                </a>
+
 
                 <div id="playlists-div" class="bg-secondary mx-3 my-3" style="color: white;">
                     <h5>Mis listas de reproducción:</h5>
                     <ul id="playlist-ul">
+                    <?php
+                        // Requiere el archivo de configuración de la base de datos
+                        require_once '../../config/Database.php';
+
+                        // Crea una instancia de la clase Database para establecer la conexión
+                        $database = new Database();
+                        $conn = $database->connect();
+
+                        // Consulta SQL para obtener las listas de reproducción
+                        $sql = "SELECT lista_id, lista_nombre FROM lista_reproduccion";
+                        $stmt = $conn->query($sql);
+
+                        // Comprueba si hay resultados
+                        if ($stmt->rowCount() > 0) {
+                            // Itera sobre los resultados y agrega elementos a la lista
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<li>" . htmlspecialchars($row["lista_nombre"]) . "</li>";
+                            }
+                        } else {
+                            echo "<li>No hay listas de reproducción disponibles</li>";
+                        }
+
+                        // Liberar la consulta
+                        $stmt = null;
+                        ?>
 
                     </ul>
                 </div>
+                <main class="col-md-9">
+                <div>
+                    <form action="solicitud_playlist.php" method="post" style="text-align: center;">
+                        <input type="text" name="playlistName" style="width: 220px;">
+                        <button id="playlistForm" class="btn btn-primary" style="color: white; text-decoration: none;">Crear lista de reproducción</button>
+                    </form>
+
+                    
+                </div>
+            </main>
 
             </aside>
 
-            <main class="col-md-9">
-                <div>
-                    <form action="solicitud_playlist.php" method="post">
-                        <input type="text" name="playlistName">
-                        <button>Crear lista de reproducción</button>
-                    </form>
+            <main id="main-content" class="col-md-9">
+                <div class="input-group my-3">
+                    <!-- <input type="text" id="searcher" class="form-control" placeholder="¿Qué quieres escuchar?"> -->
+                    <input type="text" id="search-bar" class="form-control" placeholder="Busca una canción">
+                    <button id="search-btn" onclick="search()" class="btn btn-outline-secondary">Buscar</button>
+                </div>
+
+                <div id="canciones-default">
+                    <div class="row musicsRow">
+
+                        <!-- Aquí colocaremos el código PHP para cargar las canciones -->
+                        <?php
+                        // Incluir la clase Database y realizar la consulta
+                        require_once '../../config/Database.php';
+                        $database = new Database();
+                        $conn = $database->connect();
+
+                        // Consulta SQL para obtener las canciones
+                        $sql = "SELECT cancion_nombre, artista_autor, cover FROM cancion LIMIT 12";
+                        $stmt = $conn->query($sql);
+
+                        // Mostrar las canciones en los elementos HTML
+                        if ($stmt->rowCount() > 0) {
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo '<div class="col-md-3">';
+                                echo '<div class="music-card">';
+                                echo '<img class="cover" src="' . $row['cover'] . '" alt="">';
+                                echo '<div class="music-card-description">';
+                                echo '<p class="songName">' . $row['cancion_nombre'] . '</p>';
+                                echo '<p class="songAuthor">' . $row['artista_autor'] . '</p>';
+                                echo '</div>';
+                                echo '<button class="btn btn-primary btn-play">';
+                                echo '<img src="../assets/icons/Play.svg" alt="" class="icon-card">';
+                                echo '</button>';
+                                echo '</div>';
+                                echo '</div>';
+                            }
+                        } else {
+                            echo '<p>No se encontraron canciones.</p>';
+                        }
+                        ?>
+                        <!-- Fin del código PHP para cargar las canciones -->
+                    </div>
+                </div>
+
+                <div id="canciones-results" class="row">
+
+
+
                 </div>
             </main>
+
         </div>
     </div>
 
@@ -147,43 +231,6 @@ if (isset($_POST['logout'])) {
             unset($_SESSION['playlist_creation_error']);
             ?>
         <?php } ?>
-
-
-
-        $(document).ready(function () {
-            // Función para enviar el formulario de la playlist
-            $('#playlistForm').submit(function (event) {
-                event.preventDefault();
-                // Obtener el nombre de la playlist del formulario
-                var playlistName = $('#playlistName').val();
-
-                // Realizar la solicitud AJAX para crear la playlist
-                $.ajax({
-                    url: 'solicitud_playlist.php',
-                    type: 'POST',
-                    data: { playlistName: playlistName },
-                    success: function (response) {
-                        // Verificar si la respuesta indica éxito
-                        if (response === "success") {
-                            // Agregar la nueva playlist al <ul>
-                            var newPlaylistItem = $('<li>').text(playlistName);
-                            $('#playlist-ul').append(newPlaylistItem);
-                            // Limpiar el campo de nombre de la playlist
-                            $('#playlistName').val('');
-                            // Mostrar el mensaje de éxito
-                            alert("Playlist creada correctamente.");
-                        } else {
-                            // Si la respuesta indica un error, mostrar un mensaje de error
-                            alert("Error al crear la playlist.");
-                        }
-                    },
-                    error: function () {
-                        // En caso de error en la solicitud AJAX, mostrar un mensaje de error
-                        alert("Error en la solicitud AJAX.");
-                    }
-                });
-            });
-        });
 
 
 

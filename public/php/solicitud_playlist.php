@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verificar si el campo playlistName está vacío
     if (empty($_POST['playlistName'])) {
         $_SESSION['playlist_creation_error'] = "No se puede crear una playlist sin un nombre.";
-        echo "error";
+        header("Location: llista.php");
         exit;
     }
 
@@ -33,12 +33,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $statement->execute();
 
         // Si la inserción fue exitosa
-        echo "success";
-        exit;
+        $_SESSION['playlist_created_message'] = "Playlist creada correctamente!!!!!.";
+        // Devolver el nombre de la playlist creada como respuesta
+        header("Location: indexSession.php");
+        exit; // Importante: asegúrate de salir del script después de enviar la respuesta.
     } catch (PDOException $e) {
         // En caso de error durante la inserción
         $_SESSION['playlist_created_message'] = "Error al crear la playlist: " . $e->getMessage();
-        echo "error";
+        // Devolver un mensaje de error como respuesta
+        echo "Error";
         exit;
     }
 

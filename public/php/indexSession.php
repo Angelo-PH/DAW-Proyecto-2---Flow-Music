@@ -27,7 +27,6 @@ if (isset($_POST['logout'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/index.css">
-    <link rel="stylesheet" href="../css/indexSession.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
@@ -42,7 +41,9 @@ if (isset($_POST['logout'])) {
                         style="color: white; text-decoration: none;">Hazte Premium</a></button>
             </div>
             <div class="col text-center">
-                <h1>Flow Music</h1>
+                <a href="indexSession.php" style="text-decoration: none; color: inherit;">
+                    <h1 style="text-align: center;">Flow Music</h1>
+                </a>
             </div>
             <div class="col text-end">
                 <img src="../assets/icons/user-solid.svg" id="user-icon" alt="user-icon" width="35px" height="auto"
@@ -69,17 +70,48 @@ if (isset($_POST['logout'])) {
 
             <aside class="col-md-3" style="background: linear-gradient(to bottom, #000000, #f5f1f1);">
 
-                <img src="../assets/icons/flow music.png" alt="FlowMusic-img" width="100"
-                    style="display: block; margin: 0 auto; margin-top:20px;">
+                <a href="indexSession.php">
+                    <img src="../assets/icons/flow music.png" alt="FlowMusic-img" width="100"
+                        style="display: block; margin: 0 auto; margin-top:20px;">
+                </a>
+
 
                 <div id="playlists-div" class="bg-secondary mx-3 my-3" style="color: white;">
+                    <h4>Mi Biblioteca</h4>
                     <h5>Mis listas de reproducción:</h5>
                     <ul id="playlist-ul">
                         <!-- Aquí se agregarán las playlists dinámicamente -->
+
+                        <?php
+                        // Requiere el archivo de configuración de la base de datos
+                        require_once '../../config/Database.php';
+
+                        // Crea una instancia de la clase Database para establecer la conexión
+                        $database = new Database();
+                        $conn = $database->connect();
+
+                        // Consulta SQL para obtener las listas de reproducción
+                        $sql = "SELECT lista_id, lista_nombre FROM lista_reproduccion";
+                        $stmt = $conn->query($sql);
+
+                        // Comprueba si hay resultados
+                        if ($stmt->rowCount() > 0) {
+                            // Itera sobre los resultados y agrega elementos a la lista
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<li>" . htmlspecialchars($row["lista_nombre"]) . "</li>";
+                            }
+                        } else {
+                            echo "<li>No hay listas de reproducción disponibles</li>";
+                        }
+
+                        // Liberar la consulta
+                        $stmt = null;
+                        ?>
+
+
                     </ul>
                     <button class="btn btn-primary" style="display: block; margin: 0 auto;"
-                        onclick="window.location.href = 'llista.php';">Crea
-                        tu primera lista</button>
+                        onclick="window.location.href = 'llista.php';">Crea una lista</button>
                 </div>
 
                 <div id="footer">
@@ -95,7 +127,7 @@ if (isset($_POST['logout'])) {
                 <div class="input-group my-3">
                     <!-- <input type="text" id="searcher" class="form-control" placeholder="¿Qué quieres escuchar?"> -->
                     <input type="text" id="search-bar" class="form-control" placeholder="Busca una canción">
-                    <button id="search-btn" onclick="search()" class="btn btn-outline-secondary">Buscar</button>
+                    <button id="search-btn" class="btn btn-outline-secondary">Buscar</button>
                 </div>
 
                 <div id="canciones-default">
@@ -109,7 +141,7 @@ if (isset($_POST['logout'])) {
                         $conn = $database->connect();
 
                         // Consulta SQL para obtener las canciones
-                        $sql = "SELECT cancion_nombre, artista_autor, cover FROM cancion LIMIT 12";
+                        $sql = "SELECT * FROM cancion LIMIT 12";
                         $stmt = $conn->query($sql);
 
                         // Mostrar las canciones en los elementos HTML
@@ -117,13 +149,13 @@ if (isset($_POST['logout'])) {
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 echo '<div class="col-md-3">';
                                 echo '<div class="music-card">';
-                                echo '<img class="cover" src="' . $row['cover'] . '" alt="">';
+                                echo '<img class="cover" src="' . $row['cover'] . '">';
                                 echo '<div class="music-card-description">';
                                 echo '<p class="songName">' . $row['cancion_nombre'] . '</p>';
                                 echo '<p class="songAuthor">' . $row['artista_autor'] . '</p>';
                                 echo '</div>';
-                                echo '<button class="btn btn-primary btn-play">';
-                                echo '<img src="../assets/icons/Play.svg" alt="" class="icon-card">';
+                                echo '<button class="btn btn-primary btn-play" data-songpath="'.$row['file'].'">';
+                                echo '<img src="../assets/icons/Play.svg" class="icon-card">';
                                 echo '</button>';
                                 echo '</div>';
                                 echo '</div>';
