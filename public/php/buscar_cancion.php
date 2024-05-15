@@ -14,7 +14,7 @@ $sql = "SELECT * FROM cancion
 $stmt = $conn->prepare($sql);
 $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
 $stmt->execute();
-
+        echo '<div class="row">';
 // Generar HTML con los resultados de la búsqueda
 if ($stmt->rowCount() > 0) {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -34,4 +34,5 @@ if ($stmt->rowCount() > 0) {
 } else {
     echo '<p>No se encontraron resultados para la búsqueda.</p>';
 }
+        echo '</div>';
 ?>

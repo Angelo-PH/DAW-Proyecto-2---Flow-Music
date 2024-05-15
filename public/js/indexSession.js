@@ -8,6 +8,14 @@ const previousTrack = document.getElementById('previousTrack');
 const songLength = document.getElementById('SongLength');
 const currentTime = document.getElementById('CurrentSongTime');
 const playButtons = document.querySelectorAll('.btn-play');
+const closeButton = document.getElementById('close-btn');
+const playerContainer = document.querySelector('.music-player-container');
+
+closeButton.addEventListener('click', function () {
+    // Cambiar el estilo del contenedor del reproductor
+    playerContainer.style.display = 'none';
+    audioPlayer.pause();
+});
 
 const progressSlider = document.querySelector('.progress-slider');
 let isDragging = false;
@@ -53,6 +61,8 @@ window.addEventListener('resize', () => {
 
 playButtons.forEach(button => {
     button.addEventListener('click', () => {
+        console.log('Botón de reproducción clicado');
+
         const songpath = button.dataset.songpath;
         const songName = button.closest('.music-card').querySelector('.songName').innerText;
         const songAuthor = button.closest('.music-card').querySelector('.songAuthor').innerText;
@@ -65,7 +75,12 @@ playButtons.forEach(button => {
         audioPlayer.setAttribute('src', `${songpath}`);
         // Play the loaded song
         audioPlayer.play();
+        playerContainer.style.display = 'flex';
         playPause.src = '../assets/icons/pause.svg';
+
+        // Show the music player with a smooth transition
+        const musicPlayer = document.querySelector('.music-player-container');
+        musicPlayer.classList.add('show');
     });
 });
 
@@ -100,26 +115,52 @@ window.onclick = function (event) {
     }
 }
 
-$(document).ready(function () {
-    $('#search-btn').click(function () {
-        var searchTerm = $('#search-bar').val();
+$('#search-btn').click(function () {
+    var searchTerm = $('#search-bar').val();
 
-        // Realizar la solicitud AJAX al servidor
-        $.ajax({
-            url: 'buscar_cancion.php', // Archivo PHP para procesar la búsqueda
-            method: 'POST',
-            data: { searchTerm: searchTerm },
-            success: function (response) {
-                $('#canciones-default').html('');
-                $('#canciones-results').html(response); // Mostrar los resultados en el contenedor
-            },
-            error: function (xhr, status, error) {
-                console.error(error);
-            }
-        });
+    // Realizar la solicitud AJAX al servidor
+    $.ajax({
+        url: 'buscar_cancion.php', // Archivo PHP para procesar la búsqueda
+        method: 'POST',
+        data: { searchTerm: searchTerm },
+        success: function (response) {
+            $('#canciones-default').html(response);
+
+            // Agregar funcionalidad de reproducción a los botones .btn-play en los nuevos resultados
+            const playButtons = document.querySelectorAll('.btn-play');
+
+            playButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    console.log('Botón de reproducción clicado');
+
+                    const songpath = button.dataset.songpath;
+                    const songName = button.closest('.music-card').querySelector('.songName').innerText;
+                    const songAuthor = button.closest('.music-card').querySelector('.songAuthor').innerText;
+                    const songCover = button.closest('.music-card').querySelector('.cover').getAttribute('src');
+
+                    // Actualizar la información del reproductor de música
+                    document.getElementById('audioCover').setAttribute('src', songCover);
+                    document.querySelector('.song-title').innerText = songName;
+                    document.querySelector('.song-author').innerText = songAuthor;
+
+                    // Cargar la canción en el reproductor de audio
+                    audioPlayer.setAttribute('src', songpath);
+                    // Reproducir la canción cargada
+                    audioPlayer.play();
+                    playerContainer.style.display = 'flex';
+                    playPause.src = '../assets/icons/pause.svg';
+
+                    // Mostrar el reproductor de música con una transición suave
+                    const musicPlayer = document.querySelector('.music-player-container');
+                    musicPlayer.classList.add('show');
+                });
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
     });
 });
-
 
 
 

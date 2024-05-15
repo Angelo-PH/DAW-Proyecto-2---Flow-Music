@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col">
                 <button type="button" class="btn btn-primary">
-                    <a href="premiumPlans.html" style="color: white; text-decoration: none;">Hazte Premium</a>
+                    <a href="../php/premiumPlans.php" style="color: white; text-decoration: none;">Hazte Premium</a>
                 </button>
             </div>
             <div class="col text-center">

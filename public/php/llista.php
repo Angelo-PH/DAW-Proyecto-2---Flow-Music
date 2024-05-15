@@ -1,27 +1,3 @@
-<?php
-session_start();
-$user_id = $_SESSION['usuario_id'];
-$username = $_SESSION['usuario_nombre'];
-$usermail = $_SESSION['correo_electronico'];
-$user_date = $_SESSION['fecha_registro'];
-echo $user_id;
-echo $username;
-echo $usermail;
-echo $user_date;
-
-// Verifica si el botón de "Cerrar sesión" fue presionado
-if (isset($_POST['logout'])) {
-    // Destruye todas las variables de sesión
-    session_unset();
-    // Destruye la sesión
-    session_destroy();
-
-    header('Location: ../html/index.html');
-    exit; // Asegura que el script se detenga después de la redirección
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -29,15 +5,11 @@ if (isset($_POST['logout'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flow Music</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/index.css">
     <link rel="stylesheet" href="../css/indexSession.css">
-    <!-- <script src="../js/indexSession.js"></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/326c3c7577.js" crossorigin="anonymous"></script>
 
 
@@ -90,7 +62,7 @@ if (isset($_POST['logout'])) {
                 <div id="playlists-div" class="bg-secondary mx-3 my-3" style="color: white;">
                     <h5>Mis listas de reproducción:</h5>
                     <ul id="playlist-ul">
-                    <?php
+                        <?php
                         // Requiere el archivo de configuración de la base de datos
                         require_once '../../config/Database.php';
 
@@ -106,8 +78,10 @@ if (isset($_POST['logout'])) {
                         if ($stmt->rowCount() > 0) {
                             // Itera sobre los resultados y agrega elementos a la lista
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<li>" . htmlspecialchars($row["lista_nombre"]) . "</li>";
+                                $nombre_lista = htmlspecialchars($row["lista_nombre"]);
+                                echo "<li class='lista-elemento'>" . $nombre_lista . "</li>";
                             }
+
                         } else {
                             echo "<li>No hay listas de reproducción disponibles</li>";
                         }
@@ -119,15 +93,16 @@ if (isset($_POST['logout'])) {
                     </ul>
                 </div>
                 <main class="col-md-9">
-                <div>
-                    <form action="solicitud_playlist.php" method="post" style="text-align: center;">
-                        <input type="text" name="playlistName" style="width: 220px;">
-                        <button id="playlistForm" class="btn btn-primary" style="color: white; text-decoration: none;">Crear lista de reproducción</button>
-                    </form>
+                    <div>
+                        <form action="solicitud_playlist.php" method="post" style="text-align: center;">
+                            <input type="text" name="playlistName" style="width: 220px;">
+                            <button id="playlistForm" class="btn btn-primary"
+                                style="color: white; text-decoration: none;">Crear lista de reproducción</button>
+                        </form>
 
-                    
-                </div>
-            </main>
+
+                    </div>
+                </main>
 
             </aside>
 
@@ -139,18 +114,17 @@ if (isset($_POST['logout'])) {
                 </div>
 
                 <div id="canciones-default">
-                    <div class="row musicsRow">
-
+                    
                         <!-- Aquí colocaremos el código PHP para cargar las canciones -->
                         <?php
-                        // Incluir la clase Database y realizar la consulta
-                        require_once '../../config/Database.php';
-                        $database = new Database();
-                        $conn = $database->connect();
-
-                        // Consulta SQL para obtener las canciones
-                        $sql = "SELECT cancion_nombre, artista_autor, cover FROM cancion LIMIT 12";
-                        $stmt = $conn->query($sql);
+                        // Consulta SQL para obtener las canciones de la lista seleccionada
+                        $sql = "SELECT c.cancion_nombre, c.artista_autor, c.cover FROM lista_reproduccion l
+                         INNER JOIN cancion_lista cl ON l.lista_id = cl.id_lista
+                         INNER JOIN cancion c ON cl.cancion_id = c.cancion_id
+                         WHERE l.lista_nombre = :nombreLista LIMIT 12";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bindParam(':nombreLista', $nombreLista);
+                        $stmt->execute();
 
                         // Mostrar las canciones en los elementos HTML
                         if ($stmt->rowCount() > 0) {
@@ -162,9 +136,8 @@ if (isset($_POST['logout'])) {
                                 echo '<p class="songName">' . $row['cancion_nombre'] . '</p>';
                                 echo '<p class="songAuthor">' . $row['artista_autor'] . '</p>';
                                 echo '</div>';
-                                echo '<button class="btn btn-primary btn-play">';
-                                echo '<img src="../assets/icons/Play.svg" alt="" class="icon-card">';
-                                echo '</button>';
+                                // Aquí se agrega el botón con la función de JavaScript para añadir la canción
+                                echo '<button class="btn btn-primary btn-add" data-cancion="' . $row['cancion_nombre'] . '">Añadir a la playlist</button>';
                                 echo '</div>';
                                 echo '</div>';
                             }
@@ -172,8 +145,8 @@ if (isset($_POST['logout'])) {
                             echo '<p>No se encontraron canciones.</p>';
                         }
                         ?>
+
                         <!-- Fin del código PHP para cargar las canciones -->
-                    </div>
                 </div>
 
                 <div id="canciones-results" class="row">
@@ -188,6 +161,62 @@ if (isset($_POST['logout'])) {
 
 
     <script>
+        //afegim un eventlistener a cada element de la llista
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos de la lista
+            var listaElementos = document.querySelectorAll('.lista-elemento');
+
+            // Itera sobre cada elemento y agrega un event listener
+            listaElementos.forEach(function (elemento) {
+                //console.log(elemento.innerText);
+                elemento.addEventListener('click', function () {
+                    var nombreLista = this.innerText;
+                    enviarNombreLista(nombreLista); // Llama a la función y pasa el nombre de la lista
+                });
+            });
+
+
+
+            // Función para enviar el nombre de la lista
+            function enviarNombreLista(nombreLista) {
+                // AJAX request
+                $.ajax({
+                    type: 'POST', // o 'GET' dependiendo de cómo prefieras hacer la solicitud
+                    url: 'mostrar_canciones_playlist.php', // URL donde se encuentra tu script PHP u otro backend que maneje la consulta SQL
+                    data: { nombreLista: nombreLista }, // Datos que se enviarán al servidor
+                    success: function (response) {
+                        console.log('Resultado de la consulta:', response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error en la solicitud AJAX:', status, error);
+                    }
+                });
+            }
+
+        });
+
+
+
+        $(document).ready(function () {
+            $('.playlist').click(function () {
+                var nombreLista = $(this).text(); // Obtener el nombre de la lista desde el texto del elemento clicado
+                $.ajax({
+                    type: 'POST',
+                    url: 'mostrar_canciones_playlist.php',  // Reemplazar con la ruta correcta a tu script PHP
+                    data: { nombreLista: nombreLista },
+                    success: function (response) {
+                        $('#canciones-default').html(response); // Actualizar el contenido del div con el resultado de la consulta
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error en la solicitud AJAX:', status, error);
+                    }
+                });
+            });
+        });
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
         // Función para cerrar el modal
         function closeModal() {
             console.log("Botón de cierre clicado");
@@ -213,6 +242,39 @@ if (isset($_POST['logout'])) {
         }
 
 
+        /* // Espera a que el DOM esté completamente cargado
+         document.addEventListener("DOMContentLoaded", function () {
+             // Obtener todos los botones con la clase "btn-add"
+             var buttons = document.querySelectorAll('.btn-add');
+ 
+             // Iterar sobre cada botón y agregar un evento de clic
+             buttons.forEach(function (button) {
+                 button.addEventListener('click', function () {
+                     // Obtener el nombre de la canción del atributo data-cancion
+                     var cancion = this.getAttribute('data-cancion');
+ 
+                     // Realizar la solicitud AJAX para añadir la canción a la playlist
+                     var xhr = new XMLHttpRequest();
+                     xhr.onreadystatechange = function () {
+                         if (xhr.readyState === XMLHttpRequest.DONE) {
+                             if (xhr.status === 200) {
+                                 // Si la solicitud es exitosa, puedes hacer algo, como mostrar un mensaje de éxito
+                                 alert('Canción añadida a la playlist');
+                             } else {
+                                 // Si hay algún error, puedes manejarlo aquí
+                                 console.error('Error al añadir la canción a la playlist');
+                             }
+                         }
+                     };
+                     xhr.open('POST', 'agregar_cancion_playlist.php', true);
+                     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                     xhr.send('cancion=' + encodeURIComponent(cancion));
+                 });
+             });
+         });*/
+
+
+
         //MUESTRE MENSAJE PLAYLIST SE CREO OK
         <?php if (isset($_SESSION['playlist_created_message']) && !empty($_SESSION['playlist_created_message'])) { ?>
             // Mostramos el mensaje en forma de alerta
@@ -222,7 +284,7 @@ if (isset($_POST['logout'])) {
         <?php } ?>
         //------------------------------------------------------------------------------------------------------------------------------------------
 
-        //PLAYLIST NO SE CREO     
+        //PLAYLIST NO SE CREO
         <?php if (isset($_SESSION['playlist_creation_error']) && !empty($_SESSION['playlist_creation_error'])) { ?>
             // Mostramos el mensaje de error en forma de alerta
             alert("<?php echo $_SESSION['playlist_creation_error']; ?>");
@@ -230,8 +292,7 @@ if (isset($_POST['logout'])) {
             // Limpiamos la variable de sesión de error
             unset($_SESSION['playlist_creation_error']);
             ?>
-        <?php } ?>
-
+    <?php } ?>
 
 
 

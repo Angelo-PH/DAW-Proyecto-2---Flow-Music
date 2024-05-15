@@ -24,7 +24,8 @@ if (isset($_POST['logout'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flow Music</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -35,7 +36,8 @@ if (isset($_POST['logout'])) {
     <header class="container-fluid bg-dark py-3">
         <div class="row">
             <div class="col">
-                <button type="button" class="btn btn-primary"><a href="premiumPlans.php" style="color: white; text-decoration: none;">Hazte Premium</a></button>
+                <button type="button" class="btn btn-primary"><a href="premiumPlans.php"
+                        style="color: white; text-decoration: none;">Hazte Premium</a></button>
             </div>
             <div class="col text-center">
                 <a href="indexSession.php" style="text-decoration: none; color: inherit;">
@@ -43,7 +45,8 @@ if (isset($_POST['logout'])) {
                 </a>
             </div>
             <div class="col text-end">
-                <img src="../assets/icons/user-solid.svg" id="user-icon" alt="user-icon" width="35px" height="auto" style="cursor: pointer;">
+                <img src="../assets/icons/user-solid.svg" id="user-icon" alt="user-icon" width="35px" height="auto"
+                    style="cursor: pointer;">
                 <div id="user-modal" class="modal">
                     <div class="modal-content" style="width: 600px;">
                         <button class="close" onclick="closeModal()" style="font-size: smaller;">X</button>
@@ -67,7 +70,8 @@ if (isset($_POST['logout'])) {
             <aside class="col-md-3" style="background: linear-gradient(to bottom, #000000, #f5f1f1);">
 
                 <a href="indexSession.php">
-                    <img src="../assets/icons/flow music.png" alt="FlowMusic-img" width="100" style="display: block; margin: 0 auto; margin-top:20px;">
+                    <img src="../assets/icons/flow music.png" alt="FlowMusic-img" width="100"
+                        style="display: block; margin: 0 auto; margin-top:20px;">
                 </a>
 
 
@@ -105,8 +109,19 @@ if (isset($_POST['logout'])) {
 
 
                     </ul>
-                    <button class="btn btn-primary" style="display: block; margin: 0 auto;" onclick="window.location.href = 'llista.php';">Crea una lista</button>
+                    <button class="btn btn-primary" style="display: block; margin: 0 auto;"
+                        onclick="window.location.href = 'llista.php';">Crea una lista</button>
+                    <h5>Mis Albumes favoritos:</h5>
+                    <ul>
+
+
+
+                    </ul>
+                    <button class="btn btn-primary" style="display: block; margin: 0 auto;"
+                        onclick="window.location.href = 'album.php';">Añade albumes</button>
                 </div>
+
+
 
                 <div id="footer">
                     <p>@2024 Flow Music</p>
@@ -125,7 +140,6 @@ if (isset($_POST['logout'])) {
                 </div>
 
                 <div id="canciones-default">
-                    <div class="row musicsRow">
 
                         <!-- Aquí colocaremos el código PHP para cargar las canciones -->
                         <?php
@@ -137,7 +151,7 @@ if (isset($_POST['logout'])) {
                         // Consulta SQL para obtener las canciones
                         $sql = "SELECT * FROM cancion LIMIT 12";
                         $stmt = $conn->query($sql);
-
+                                echo '<div class="row">' ;
                         // Mostrar las canciones en los elementos HTML
                         if ($stmt->rowCount() > 0) {
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -148,7 +162,7 @@ if (isset($_POST['logout'])) {
                                 echo '<p class="songName">' . $row['cancion_nombre'] . '</p>';
                                 echo '<p class="songAuthor">' . $row['artista_autor'] . '</p>';
                                 echo '</div>';
-                                echo '<button class="btn btn-primary btn-play" data-songpath="' . $row['file'] . '">';
+                                echo '<button class="btn btn-primary btn-play" data-songpath="'. $row['file'] .'">';
                                 echo '<img src="../assets/icons/Play.svg" class="icon-card">';
                                 echo '</button>';
                                 echo '</div>';
@@ -156,14 +170,10 @@ if (isset($_POST['logout'])) {
                             }
                         } else {
                             echo '<p>No se encontraron canciones.</p>';
-                        }
-                        ?>
+                        }   
+                            echo '</div>';                        
+                            ?>
                         <!-- Fin del código PHP para cargar las canciones -->
-                    </div>
-                </div>
-
-                <div id="canciones-results" class="row">
-
                 </div>
 
             </main>
@@ -197,6 +207,7 @@ if (isset($_POST['logout'])) {
             <img src="../assets/icons/forward-step-solid.svg" alt="forward-step" class="icon" id="nextTrack">
             <img src="../assets/icons/Forward.svg" alt="forward-step" class="icon" id="Plus10">
         </div>
+        <button id="close-btn">X</button>
     </div>
 
     <script src="../js/indexSession.js"></script>

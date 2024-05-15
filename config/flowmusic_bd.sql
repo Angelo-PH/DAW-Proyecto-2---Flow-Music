@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-05-2024 a las 13:06:28
+-- Tiempo de generación: 15-05-2024 a las 09:20:21
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.1.17
 
@@ -17,6 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+--
 -- Base de datos: `flowmusic_bd`
 --
 
@@ -29,10 +30,21 @@ SET time_zone = "+00:00";
 CREATE TABLE `album` (
   `album_id` int(11) NOT NULL,
   `album_nom` varchar(255) NOT NULL,
+  `cover` varchar(255) NOT NULL,
   `año_lanzamiento` int(11) NOT NULL,
   `id_autor` int(11) NOT NULL,
   `id_genero` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `album`
+--
+
+INSERT INTO `album` (`album_id`, `album_nom`, `cover`, `año_lanzamiento`, `id_autor`, `id_genero`) VALUES
+(1, 'Vida', '../assets/media/albumCovers/vida.jpg', 2010, 1, 5),
+(2, 'Palabreo del futuro', '../assets/media/albumCovers/palabreoDelFuturo.jpg', 2020, 2, 6),
+(3, 'Enfasis', '../assets/media/albumCovers/enfasis.jpg', 2023, 4, 6),
+(4, 'Standly Exitos', '../assets/media/albumCovers/standlyExitos.jpg', 2022, 3, 6);
 
 -- --------------------------------------------------------
 
@@ -44,6 +56,16 @@ CREATE TABLE `artista` (
   `artista_id` int(11) NOT NULL,
   `artista_nombre` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `artista`
+--
+
+INSERT INTO `artista` (`artista_id`, `artista_nombre`) VALUES
+(1, 'Cancerbero'),
+(2, 'El Jordan 23'),
+(3, 'Standly'),
+(4, 'Jere Klein');
 
 -- --------------------------------------------------------
 
@@ -64,7 +86,7 @@ CREATE TABLE `cancion` (
 --
 
 INSERT INTO `cancion` (`cancion_id`, `cancion_nombre`, `artista_autor`, `file`, `cover`) VALUES
-(1, 'El sonido de campanas', 'Oscar Lee', '../assets/media/audio/Oscar Lee - EL SONIDO DE CAMPANAS.mp3', '../assets/media/img/elSonidoDeCampanas.jpg'),
+(1, 'El sonido de campanas', 'Oscar Lee', '../assets/media/audio/OscarLee-ELSONIDODECAMPANAS.mp3', '../assets/media/img/elSonidoDeCampanas.jpg'),
 (2, 'A 300', 'JC Reyes', '../assets/media/audio/Mp3juice.blog JC REYES - A 300.mp3', '../assets/media/img/A300.jpg'),
 (3, 'Me prefieres a mí', 'Arcangel', '../assets/media/audio/Arcangel - Me Prefieres a Mi [Official Video].mp3', '../assets/media/img/mePrefieresAMi.jpg'),
 (4, 'Entramos Disparando', 'Ñengo Flow', '../assets/media/audio/Ñengo Flow - Entramos Disparando [Official Audio].mp3', '../assets/media/img/entramosDisparando.jpg'),
@@ -83,6 +105,28 @@ INSERT INTO `cancion` (`cancion_id`, `cancion_nombre`, `artista_autor`, `file`, 
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `cancion_lista`
+--
+
+CREATE TABLE `cancion_lista` (
+  `cancion_id` int(11) NOT NULL,
+  `id_lista` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `cancion_lista`
+--
+
+INSERT INTO `cancion_lista` (`cancion_id`, `id_lista`) VALUES
+(2, 79),
+(3, 79),
+(5, 79),
+(6, 78),
+(9, 78);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `genero`
 --
 
@@ -90,6 +134,14 @@ CREATE TABLE `genero` (
   `genero_id` int(11) NOT NULL,
   `genero_nom` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `genero`
+--
+
+INSERT INTO `genero` (`genero_id`, `genero_nom`) VALUES
+(5, 'Hip hop'),
+(6, 'Reguetón');
 
 -- --------------------------------------------------------
 
@@ -103,6 +155,26 @@ CREATE TABLE `lista_reproduccion` (
   `usuario_id` int(11) NOT NULL,
   `fecha_creacion` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `lista_reproduccion`
+--
+
+INSERT INTO `lista_reproduccion` (`lista_id`, `lista_nombre`, `usuario_id`, `fecha_creacion`) VALUES
+(1, 'hgfghgfh', 24, '2024-05-07'),
+(2, 'pop', 24, '2024-05-07'),
+(71, 'uuuuu', 24, '2024-05-13'),
+(72, '09876', 24, '2024-05-13'),
+(73, 'hola', 24, '2024-05-13'),
+(74, 'ifghdhfghfdg', 24, '2024-05-13'),
+(75, 'regeton', 24, '2024-05-13'),
+(76, 'ñaño', 24, '2024-05-13'),
+(77, 'regeton', 24, '2024-05-14'),
+(78, '1234', 24, '2024-05-14'),
+(79, 'hola', 24, '2024-05-14'),
+(80, 'holaktal', 24, '2024-05-14'),
+(81, 'ppppppp', 24, '2024-05-14'),
+(82, 'hhhhh', 24, '2024-05-14');
 
 -- --------------------------------------------------------
 
@@ -184,9 +256,8 @@ INSERT INTO `usuario` (`usuario_id`, `usuario_nombre`, `contrasena`, `fecha_regi
 --
 ALTER TABLE `album`
   ADD PRIMARY KEY (`album_id`),
-  ADD KEY `album_id` (`album_id`),
   ADD KEY `id_autor` (`id_autor`),
-  ADD KEY `id_genero` (`id_genero`);
+  ADD KEY `fk_album_genero` (`id_genero`);
 
 --
 -- Indices de la tabla `artista`
@@ -199,6 +270,13 @@ ALTER TABLE `artista`
 --
 ALTER TABLE `cancion`
   ADD PRIMARY KEY (`cancion_id`);
+
+--
+-- Indices de la tabla `cancion_lista`
+--
+ALTER TABLE `cancion_lista`
+  ADD PRIMARY KEY (`cancion_id`,`id_lista`),
+  ADD KEY `lista_id` (`id_lista`);
 
 --
 -- Indices de la tabla `genero`
@@ -241,25 +319,25 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `album`
 --
 ALTER TABLE `album`
-  MODIFY `album_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `album_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `artista`
 --
 ALTER TABLE `artista`
-  MODIFY `artista_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `artista_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `genero`
 --
 ALTER TABLE `genero`
-  MODIFY `genero_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `genero_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `lista_reproduccion`
 --
 ALTER TABLE `lista_reproduccion`
-  MODIFY `lista_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `lista_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT de la tabla `payment_info`
@@ -287,13 +365,15 @@ ALTER TABLE `usuario`
 -- Filtros para la tabla `album`
 --
 ALTER TABLE `album`
-  ADD CONSTRAINT `album_ibfk_1` FOREIGN KEY (`id_autor`) REFERENCES `artista` (`artista_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `album_ibfk_1` FOREIGN KEY (`id_autor`) REFERENCES `artista` (`artista_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_album_genero` FOREIGN KEY (`id_genero`) REFERENCES `genero` (`genero_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `genero`
+-- Filtros para la tabla `cancion_lista`
 --
-ALTER TABLE `genero`
-  ADD CONSTRAINT `genero_ibfk_1` FOREIGN KEY (`genero_id`) REFERENCES `album` (`id_genero`) ON UPDATE CASCADE;
+ALTER TABLE `cancion_lista`
+  ADD CONSTRAINT `cancion_lista_ibfk_1` FOREIGN KEY (`cancion_id`) REFERENCES `cancion` (`cancion_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `cancion_lista_ibfk_2` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`lista_id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `lista_reproduccion`
