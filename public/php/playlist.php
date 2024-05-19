@@ -38,10 +38,9 @@
                         <p>Correo electrónico: <?php echo $usermail; ?></p>
                         <p>Fecha de registro: <?php echo $user_date; ?></p>
 
-                        <form method="post">
-                            <button type="submit" id="logout-btn" name="logout" class="btn btn-primary">Cerrar
-                                sesión</button>
-                        </form>
+                        <form method="post" action="logout.php">
+    <button type="submit" id="logout-btn" name="logout" class="btn btn-primary">Cerrar sesión</button>
+</form>
                     </div>
                 </div>
             </div>

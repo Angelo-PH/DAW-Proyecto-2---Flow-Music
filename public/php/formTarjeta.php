@@ -12,9 +12,13 @@
 </head>
 
 <body>
-    <header class="container-fluid bg-dark py-4">
-        <div class="col text-center">
-            <a href="../html/index.html" id="linkFlowMusic">Flow Music</a></href>
+<header class="container-fluid bg-dark py-3">
+        <div class="row">
+            <div class="col text-center">
+                <a href="indexSession.php" style="text-decoration: none;">
+                    <h1 style="text-align: center;">Flow Music</h1>
+                </a>
+            </div>
         </div>
     </header>
 
@@ -35,15 +39,6 @@
         <input type="password" id="cvv" name="cvv" maxlength="3" required>
         <input type="submit" value="Suscribirse">
     </form>
-
-    <footer>
-        <p>&copy; 2024 Flow Music</p>
-        <div class="redes-sociales">
-            <a href="https://www.instagram.com"><i class="fab fa-instagram"></i> Instagram</a>
-            <a href="https://www.tiktok.com"><i class="fab fa-tiktok"></i> TikTok</a>
-            <a href="https://www.twitter.com"><i class="fab fa-twitter"></i> Twitter</a>
-        </div>
-    </footer>
 
 </body>
 

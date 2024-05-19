@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verificar si el campo playlistName está vacío
     if (empty($_POST['playlistName'])) {
         $_SESSION['playlist_creation_error'] = "No se puede crear una playlist sin un nombre.";
-        header("Location: llista.php");
+        header("Location: playlist.php");
         exit;
     }
 

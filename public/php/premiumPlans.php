@@ -1,15 +1,19 @@
 <?php
 session_start();
 
-// Verificar si la variable de sesión 'usuario_nombre' está establecida para determinar si el usuario está autenticado
-if (isset($_SESSION['usuario_nombre'])) {
-  $username = $_SESSION['usuario_nombre'];
-  $usermail = $_SESSION['correo_electronico'];
-} else {
-  // Si no hay sesión activa, redirigir a la página de inicio de sesión
-  header("Location: ../html/login.html");
-  exit();
+// Comprobar si el usuario ha iniciado sesión
+if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_nombre']) || !isset($_SESSION['correo_electronico']) || !isset($_SESSION['fecha_registro'])) {
+    // Si alguna de las variables de sesión no está definida, redirigir al usuario a la página de inicio de sesión
+    header("Location: ../html/login.html");
+    exit();
 }
+
+// Si el usuario ha iniciado sesión, obtener los datos del usuario
+$user_id = $_SESSION['usuario_id'];
+$username = $_SESSION['usuario_nombre'];
+$usermail = $_SESSION['correo_electronico'];
+$user_date = $_SESSION['fecha_registro'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

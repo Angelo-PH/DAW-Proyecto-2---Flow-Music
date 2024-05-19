@@ -36,11 +36,6 @@ header h1 {
     text-decoration: none;
 }
 
-#playlists-div {
-    padding: 15px;
-    border-radius: 7.5%;
-}
-
 #footer {
     background-color: rgb(116, 114, 114);
     color: #fff;

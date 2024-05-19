@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-05-2024 a las 09:20:21
+-- Tiempo de generación: 20-05-2024 a las 01:22:39
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.1.17
 
@@ -45,6 +45,17 @@ INSERT INTO `album` (`album_id`, `album_nom`, `cover`, `año_lanzamiento`, `id_a
 (2, 'Palabreo del futuro', '../assets/media/albumCovers/palabreoDelFuturo.jpg', 2020, 2, 6),
 (3, 'Enfasis', '../assets/media/albumCovers/enfasis.jpg', 2023, 4, 6),
 (4, 'Standly Exitos', '../assets/media/albumCovers/standlyExitos.jpg', 2022, 3, 6);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `album_cancion`
+--
+
+CREATE TABLE `album_cancion` (
+  `album_id` int(11) NOT NULL,
+  `cancion_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -247,6 +258,17 @@ INSERT INTO `usuario` (`usuario_id`, `usuario_nombre`, `contrasena`, `fecha_regi
 (24, 'Adam Iglesias', '123456', '2024-04-29', 'aiglesias@gmail.com'),
 (25, 'User Created', '123456', '2024-04-30', 'ucreated@gmail.com');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario_album`
+--
+
+CREATE TABLE `usuario_album` (
+  `usuario_id` int(11) NOT NULL,
+  `album_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Índices para tablas volcadas
 --
@@ -258,6 +280,13 @@ ALTER TABLE `album`
   ADD PRIMARY KEY (`album_id`),
   ADD KEY `id_autor` (`id_autor`),
   ADD KEY `fk_album_genero` (`id_genero`);
+
+--
+-- Indices de la tabla `album_cancion`
+--
+ALTER TABLE `album_cancion`
+  ADD PRIMARY KEY (`album_id`,`cancion_id`),
+  ADD KEY `cancion_id` (`cancion_id`);
 
 --
 -- Indices de la tabla `artista`
@@ -310,6 +339,13 @@ ALTER TABLE `subscription`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`usuario_id`);
+
+--
+-- Indices de la tabla `usuario_album`
+--
+ALTER TABLE `usuario_album`
+  ADD PRIMARY KEY (`usuario_id`,`album_id`),
+  ADD KEY `album_id` (`album_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -369,6 +405,13 @@ ALTER TABLE `album`
   ADD CONSTRAINT `fk_album_genero` FOREIGN KEY (`id_genero`) REFERENCES `genero` (`genero_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `album_cancion`
+--
+ALTER TABLE `album_cancion`
+  ADD CONSTRAINT `album_cancion_ibfk_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`album_id`),
+  ADD CONSTRAINT `album_cancion_ibfk_2` FOREIGN KEY (`cancion_id`) REFERENCES `cancion` (`cancion_id`);
+
+--
 -- Filtros para la tabla `cancion_lista`
 --
 ALTER TABLE `cancion_lista`
@@ -392,6 +435,13 @@ ALTER TABLE `payment_info`
 --
 ALTER TABLE `subscription`
   ADD CONSTRAINT `subscription_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuario` (`usuario_id`);
+
+--
+-- Filtros para la tabla `usuario_album`
+--
+ALTER TABLE `usuario_album`
+  ADD CONSTRAINT `usuario_album_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`),
+  ADD CONSTRAINT `usuario_album_ibfk_2` FOREIGN KEY (`album_id`) REFERENCES `album` (`album_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
