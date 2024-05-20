@@ -24,10 +24,10 @@ $user_date = $_SESSION['fecha_registro'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flow Music</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 </head>
 
 <body>
@@ -35,23 +35,27 @@ $user_date = $_SESSION['fecha_registro'];
     <header class="container-fluid bg-dark py-3">
         <div class="row">
             <div class="col">
-                <button type="button" class="btn btn-primary"><a href="premiumPlans.php" style="color: white; text-decoration: none;">Hazte Premium</a></button>
+                <button type="button" class="btn btn-primary"><a href="premiumPlans.php"
+                        style="color: white; text-decoration: none;">Hazte Premium</a></button>
             </div>
             <div class="col text-center">
-                <a href="indexSession.php" style="text-decoration: none;">
-                    <h1>Flow Music</h1>
+                <a href="indexSession.php" style="text-decoration: none; color: inherit;">
+                    <h1 style="text-align: center;">Flow Music</h1>
                 </a>
             </div>
             <div class="col text-end">
-                <img src="../assets/icons/user-solid.svg" id="user-icon" alt="user-icon" width="40px" height="auto" style="cursor: pointer;">
+                <img src="../assets/icons/user-solid.svg" id="user-icon" alt="user-icon" width="35px" height="auto"
+                    style="cursor: pointer;">
                 <div id="user-modal" class="modal">
                     <div class="modal-content" style="width: 600px;">
-                        <button class="close" onclick="closeModal()" style="font-size:small;">X</button>
-                        <p>Bienvenido, <?php echo $username;?></p>
+                        <button class="close" onclick="closeModal()" style="font-size: smaller;">X</button>
+                        <p>Hola! <?php echo $username; ?></p>
                         <p>Correo electrónico: <?php echo $usermail; ?></p>
                         <p>Fecha de registro: <?php echo $user_date; ?></p>
+
                         <form method="post" action="logout.php">
-                            <button type="submit" id="logout-btn" name="logout" class="btn btn-primary">Cerrar sesión</button>
+                            <button type="submit" id="logout-btn" name="logout" class="btn btn-primary">Cerrar
+                                sesión</button>
                         </form>
                     </div>
                 </div>
@@ -62,8 +66,10 @@ $user_date = $_SESSION['fecha_registro'];
     <div class="container-fluid">
         <div class="row">
             <aside class="col-md-3" style="background: linear-gradient(to bottom, #000000, #f5f1f1);">
-                    <img src="../assets/icons/flow-music.png" alt="flow-music.png" width="100" style="display: block; margin: 0 auto; margin-top:20px;">
-                <div class="mx-2 my-2" style="background-color: rgb(116, 114, 114); color: white; padding: 15px; border-radius: 7.5%;">
+                <img src="../assets/icons/flow-music.png" alt="flow-music.png" width="100"
+                    style="display: block; margin: 0 auto; margin-top:20px;">
+                <div class="mx-2 my-2"
+                    style="background-color: rgb(116, 114, 114); color: white; padding: 15px; border-radius: 7.5%;">
                     <h2>Biblioteca</h2>
                     <h4>Mis listas de reproducción:</h4>
                     <ul id="playlist-ul">
@@ -74,7 +80,7 @@ $user_date = $_SESSION['fecha_registro'];
                         $database = new Database();
                         $conn = $database->connect();
                         // Consulta SQL para obtener las listas de reproducción
-                        $sql = "SELECT lista_id, lista_nombre FROM lista_reproduccion WHERE usuario_id = $user_id" ;
+                        $sql = "SELECT lista_id, lista_nombre FROM lista_reproduccion WHERE usuario_id = $user_id";
                         $stmt = $conn->query($sql);
                         // Comprueba si hay resultados
                         if ($stmt->rowCount() > 0) {
@@ -89,7 +95,8 @@ $user_date = $_SESSION['fecha_registro'];
                         $stmt = null;
                         ?>
                     </ul>
-                    <button class="btn btn-primary" style="display: block; margin: 0 auto;" onclick="window.location.href = 'playlist.php';">Crea una lista</button>
+                    <button class="btn btn-primary" style="display: block; margin: 0 auto;"
+                        onclick="window.location.href = 'playlist.php';">Crea una lista</button>
                     <h4>Mis Albumes favoritos:</h4>
                     <ul id="album-ul">
                         <?php
@@ -109,13 +116,13 @@ $user_date = $_SESSION['fecha_registro'];
                     JOIN 
                         artista ON album.id_autor = artista.artista_id
                     WHERE 
-                        usuario_album.usuario_id = $user_id" ;
+                        usuario_album.usuario_id = $user_id";
                         $stmt = $conn->query($sql);
                         // Comprueba si hay resultados
                         if ($stmt->rowCount() > 0) {
                             // Itera sobre los resultados y agrega elementos a la lista
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<li>" . htmlspecialchars($row["Nombre_Album"]) . " - "  . htmlspecialchars($row["Nombre_Artista"]) . "</li>";
+                                echo "<li>" . htmlspecialchars($row["Nombre_Album"]) . " - " . htmlspecialchars($row["Nombre_Artista"]) . "</li>";
                             }
                         } else {
                             echo "<li>No hay albumes favoritos</li>";
@@ -124,7 +131,8 @@ $user_date = $_SESSION['fecha_registro'];
                         $stmt = null;
                         ?>
                     </ul>
-                    <button class="btn btn-primary" style="display: block; margin: 0 auto;" onclick="window.location.href = 'album.php';">Agrega albumes</button>
+                    <button class="btn btn-primary" style="display: block; margin: 0 auto;"
+                        onclick="window.location.href = 'album.php';">Agrega albumes</button>
                 </div>
 
 
@@ -140,7 +148,8 @@ $user_date = $_SESSION['fecha_registro'];
 
             <main id="main-content" class="col-md-9">
                 <div class="input-group my-3">
-                    <input type="text" id="search-bar" class="form-control" placeholder="Busca una canción o artista...">
+                    <input type="text" id="search-bar" class="form-control"
+                        placeholder="Busca una canción o artista...">
                     <button id="search-btn" class="btn btn-outline-secondary">Buscar</button>
                 </div>
 
@@ -148,16 +157,14 @@ $user_date = $_SESSION['fecha_registro'];
 
                     <!-- Aquí colocaremos el código PHP para cargar las canciones -->
                     <?php
-                    // Incluir la clase Database y realizar la consulta
                     require_once '../../config/Database.php';
                     $database = new Database();
                     $conn = $database->connect();
 
-                    // Consulta SQL para obtener las canciones
                     $sql = "SELECT * FROM cancion LIMIT 12";
                     $stmt = $conn->query($sql);
                     echo '<div class="row">';
-                    // Mostrar las canciones en los elementos HTML
+
                     if ($stmt->rowCount() > 0) {
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo '<div class="col-md-3">';
@@ -167,7 +174,7 @@ $user_date = $_SESSION['fecha_registro'];
                             echo '<p class="songName">' . $row['cancion_nombre'] . '</p>';
                             echo '<p class="songAuthor">' . $row['artista_autor'] . '</p>';
                             echo '</div>';
-                            echo '<button class="btn btn-primary btn-play" data-songpath="' . $row['file'] . '">';
+                            echo '<button class="btn btn-primary btn-play" data-songpath="' . $row['file'] . '" data-id="' . $row['cancion_id'] . '">';
                             echo '<img src="../assets/icons/Play.svg" class="icon-card">';
                             echo '</button>';
                             echo '</div>';
@@ -196,7 +203,6 @@ $user_date = $_SESSION['fecha_registro'];
             <div class="progress-song-container">
                 <div class="progress-bar">
                     <span class="progress"></span>
-                    <div class="progress-slider"></div>
                 </div>
             </div>
             <div class="time-container">

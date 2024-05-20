@@ -1,3 +1,21 @@
+<?php
+session_start();
+
+// Comprobar si el usuario ha iniciado sesión
+if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_nombre']) || !isset($_SESSION['correo_electronico']) || !isset($_SESSION['fecha_registro'])) {
+    // Si alguna de las variables de sesión no está definida, redirigir al usuario a la página de inicio de sesión
+    header("Location: ../html/login.html");
+    exit();
+}
+
+// Si el usuario ha iniciado sesión, obtener los datos del usuario
+$user_id = $_SESSION['usuario_id'];
+$username = $_SESSION['usuario_nombre'];
+$usermail = $_SESSION['correo_electronico'];
+$user_date = $_SESSION['fecha_registro'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -7,7 +25,6 @@
     <title>Flow Music</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/index.css">
-    <link rel="stylesheet" href="../css/indexSession.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/326c3c7577.js" crossorigin="anonymous"></script>
@@ -51,14 +68,10 @@
         <div class="row" style="height:100%">
 
             <aside class="col-md-3" style="background: linear-gradient(to bottom, #000000, #f5f1f1); ">
-
-                <a href="indexSession.php">
-                    <img src="../assets/icons/flow music.png" alt="FlowMusic-img" width="100"
-                        style="display: block; margin: 0 auto; margin-top:20px;">
-                </a>
-
-
-                <div id="playlists-div" class="bg-secondary mx-3 my-3" style="color: white;">
+            <img src="../assets/icons/flow-music.png" alt="flow-music.png" width="100"
+                    style="display: block; margin: 0 auto; margin-top:20px;">
+                    <div class="mx-2 my-2"
+                    style="background-color: rgb(116, 114, 114); color: white; padding: 15px; border-radius: 7.5%;">
                     <h5>Mis listas de reproducción:</h5>
                     <ul id="playlist-ul">
                         <?php
@@ -239,40 +252,6 @@
                 modal.style.display = "none";
             }
         }
-
-
-        /* // Espera a que el DOM esté completamente cargado
-         document.addEventListener("DOMContentLoaded", function () {
-             // Obtener todos los botones con la clase "btn-add"
-             var buttons = document.querySelectorAll('.btn-add');
- 
-             // Iterar sobre cada botón y agregar un evento de clic
-             buttons.forEach(function (button) {
-                 button.addEventListener('click', function () {
-                     // Obtener el nombre de la canción del atributo data-cancion
-                     var cancion = this.getAttribute('data-cancion');
- 
-                     // Realizar la solicitud AJAX para añadir la canción a la playlist
-                     var xhr = new XMLHttpRequest();
-                     xhr.onreadystatechange = function () {
-                         if (xhr.readyState === XMLHttpRequest.DONE) {
-                             if (xhr.status === 200) {
-                                 // Si la solicitud es exitosa, puedes hacer algo, como mostrar un mensaje de éxito
-                                 alert('Canción añadida a la playlist');
-                             } else {
-                                 // Si hay algún error, puedes manejarlo aquí
-                                 console.error('Error al añadir la canción a la playlist');
-                             }
-                         }
-                     };
-                     xhr.open('POST', 'agregar_cancion_playlist.php', true);
-                     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                     xhr.send('cancion=' + encodeURIComponent(cancion));
-                 });
-             });
-         });*/
-
-
 
         //MUESTRE MENSAJE PLAYLIST SE CREO OK
         <?php if (isset($_SESSION['playlist_created_message']) && !empty($_SESSION['playlist_created_message'])) { ?>
